@@ -60,7 +60,7 @@ public class SentimentsView {
 
         /* TODO Grouping is not accurate right now , need to find out another way of grouping */
         query.execute("create table "+Constants.TeamSentiments+" as select " +
-                "screen_name,verified " +
+                "screen_name, " +
                 "case " +
                 "  when sum( polarity ) > 0 then 'positive' " +
                 "  when sum( polarity ) < 0 then 'negative'  " +

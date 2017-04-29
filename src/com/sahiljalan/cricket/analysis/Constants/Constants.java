@@ -19,10 +19,10 @@ public class Constants {
     public static final String Prefix_Location = "hdfs://localhost:9000/IPL";
     public static String Postfix_Location = "/KXIPvsMI/year=2017/month=04/day=20/";
 
-    public static String TableName = "Match_Buzz";
+    public static String TableName = "Match_Buzz_Default";
     public static String DictionaryTable = "dictionary";
     public static String TimeZoneTable = "timezone";
-    public static String DataBaseName = "ProjectCricket";
+    public static String DataBaseName = "Project_Cricket_Defualt";
 
     public static String TeamHashtags = "TeamHashtags_Sample";
     public static String TeamMentions = "TeamMentions_Sample";

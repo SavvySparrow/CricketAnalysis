@@ -2,7 +2,6 @@ package com.sahiljalan.cricket.analysis;
 
 import com.sahiljalan.cricket.analysis.Constants.TeamName;
 import com.sahiljalan.cricket.analysis.CricketAnalysis.CricketAnalysis;
-import com.sahiljalan.cricket.analysis.Views.SentimentsView.SentimentsView;
 
 import java.sql.SQLException;
 

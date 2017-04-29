@@ -20,7 +20,7 @@ public class CricketAnalysis implements CricketAnalysisInterface {
 
     private static Statement query;
 
-    public static void startConnection() throws SQLException, ClassNotFoundException {
+    protected static void startConnection() throws SQLException, ClassNotFoundException {
         HiveConnection startHive = new HiveConnection();
         query = startHive.getConnection().createStatement();
     }

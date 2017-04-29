@@ -1,17 +1,17 @@
-package com.sahiljalan.cricket.analysis.tables;
+package com.sahiljalan.cricket.analysis.Tables;
 
 import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.sahiljalan.cricket.analysis.Constants.Constants;
-import com.sahiljalan.cricket.analysis.MainCricket;
+import com.sahiljalan.cricket.analysis.Main;
 
 /**
  * Created by sahiljalan on 28/4/17.
  */
 public class RawTable extends TimeZone{
 
-    private Statement query = MainCricket.getStatement();
+    private Statement query = Main.getStatement();
 
     //Create Default TableName
     public RawTable() throws SQLException{

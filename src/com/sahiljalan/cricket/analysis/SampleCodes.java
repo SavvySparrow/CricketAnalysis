@@ -24,8 +24,8 @@ public class Create {
     String team2_hashtags = Constants.Team2Hashtags;
     String team1_mentions = Constants.Team1Mentions;
     String team2_mentions = Constants.Team2Mentions;
-    String team1 = Constants.Team1;
-    String team2 = Constants.Team2;
+    String team1 = Constants.TEAM1_VIEW;
+    String team2 = Constants.TEAM2_VIEW;
 
 
     public static void main(String[] arg) throws SQLException, ClassNotFoundException {

@@ -1,7 +1,7 @@
-package com.sahiljalan.cricket.analysis.tables;
+package com.sahiljalan.cricket.analysis.Tables;
 
 import com.sahiljalan.cricket.analysis.Constants.Constants;
-import com.sahiljalan.cricket.analysis.MainCricket;
+import com.sahiljalan.cricket.analysis.Main;
 
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -11,7 +11,7 @@ import java.sql.Statement;
  */
 public class Dictionary {
 
-    private Statement query = MainCricket.getStatement();
+    private Statement query = Main.getStatement();
 
     public Dictionary() throws SQLException {
         System.out.println("Running : Dictionary class");

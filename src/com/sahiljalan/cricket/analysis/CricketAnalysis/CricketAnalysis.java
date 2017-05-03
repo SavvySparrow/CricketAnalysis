@@ -3,6 +3,7 @@ package com.sahiljalan.cricket.analysis.CricketAnalysis;
 import com.sahiljalan.cricket.analysis.ConnectionToHive.HiveConnection;
 import com.sahiljalan.cricket.analysis.Constants.TeamName;
 import com.sahiljalan.cricket.analysis.Databases.CreateDB;
+import com.sahiljalan.cricket.analysis.Tables.CompareTeamPosHype;
 import com.sahiljalan.cricket.analysis.Tables.RawTable;
 import com.sahiljalan.cricket.analysis.TeamData.TeamData;
 import com.sahiljalan.cricket.analysis.Views.RawViews;
@@ -23,10 +24,13 @@ public class CricketAnalysis implements CricketAnalysisInterface {
     protected static void startConnection() throws SQLException, ClassNotFoundException {
         HiveConnection startHive = new HiveConnection();
         query = startHive.getConnection().createStatement();
+        query.execute("CREATE TEMPORARY FUNCTION NumberRows AS " +
+                "'com.sahil.jalan.UDFNumberRows'");
     }
     public static Statement getStatement() {
         return query;
     }
+
 
     @Override
     public void SetTeams(String t1, String t2) {
@@ -85,5 +89,10 @@ public class CricketAnalysis implements CricketAnalysisInterface {
     @Override
     public void createSentimentsViews() throws SQLException {
         new SentimentsView();
+    }
+
+    @Override
+    public void calposhype() throws SQLException {
+        new CompareTeamPosHype();
     }
 }

@@ -19,5 +19,7 @@ public interface CricketAnalysisInterface {
     void createTeamViews() throws SQLException;
 
     void createSentimentsViews() throws SQLException;
+
+    void calposhype() throws SQLException;
 }
 

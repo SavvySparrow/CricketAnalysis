@@ -50,9 +50,8 @@ public class Team {
 
         System.out.println("Running : creating " + Constants.TeamView + " View");
         query.execute("create view if not EXISTS "+Constants.TeamView +" as " +
-                "select a.ts,a.created_at,a.screen_name,a.verified,a.text,b.country from "+Constants.TeamViewTemp +
+                "select cast(NumberRows(a.screen_name) as bigint) rowid,a.ts,a.created_at,a.screen_name,a.verified,a.text,b.country from "+Constants.TeamViewTemp +
                 " a left join "+Constants.TimeZoneTable+" b on (a.time_zone=b.zone)");
-
 
     }
 }

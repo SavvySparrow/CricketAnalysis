@@ -20,6 +20,7 @@ public class SentimentsView {
         Constants.setsentimentView3(Constants.SentiViewT1V3);
         Constants.TeamSentiments(Constants.Team1Sentiments);
         Constants.setTeamView(Constants.TEAM1_VIEW);
+        Constants.setPosHype(Constants.PosHype1);
         createSentimentsView();
 
         Constants.setsentimentView1(Constants.SentiViewT2V1);
@@ -27,6 +28,7 @@ public class SentimentsView {
         Constants.setsentimentView3(Constants.SentiViewT2V3);
         Constants.TeamSentiments(Constants.Team2Sentiments);
         Constants.setTeamView(Constants.TEAM2_VIEW);
+        Constants.setPosHype(Constants.PosHype2);
         createSentimentsView();
 
     }
@@ -38,15 +40,15 @@ public class SentimentsView {
         query.execute("drop view if EXISTS " + Constants.SentimentView3);
 
 
-        query.execute("create view "+Constants.SentimentView1+" as select text,verified,created_at,screen_name, words from " +
-                Constants.TeamView +" lateral view explode(sentences(lower(text))) dummy as words");
+        query.execute("create view "+Constants.SentimentView1+" as select rowid," +
+                " words from " +Constants.TeamView +" lateral " +
+                "view explode(sentences(lower(text))) dummy as words");
 
-        query.execute("create view "+Constants.SentimentView2+" as select text,verified,created_at," +
-                "screen_name, word from "+Constants.SentimentView1+" lateral " +
+        query.execute("create view "+Constants.SentimentView2+" as select rowid," +
+                " word from "+Constants.SentimentView1+" lateral " +
                 "view explode(words) dummy as word");
 
-        query.execute("create view "+Constants.SentimentView3+" as select " +
-                "text,created_at,screen_name,verified," +
+        query.execute("create view "+Constants.SentimentView3+" as select rowid," +
                 "c.word, " +
                 "case d.polarity " +
                 "   when 'negative' then -1" +
@@ -57,14 +59,20 @@ public class SentimentsView {
 
         query.execute("drop table if EXISTS " + Constants.TeamSentiments);
 
-
-        /* TODO Grouping is not accurate right now , need to find out another way of grouping */
+        
         query.execute("create table "+Constants.TeamSentiments+" as select " +
-                "screen_name, " +
+                "rowid, " +
                 "case " +
                 "  when sum( polarity ) > 0 then 'positive' " +
                 "  when sum( polarity ) < 0 then 'negative'  " +
                 "else 'neutral' end as sentiment " +
-                "from "+Constants.SentimentView3+" group by created_at,screen_name,text");
+                "from "+Constants.SentimentView3+" group by rowid");
+
+        query.execute("drop view if EXISTS " + Constants.PosHype);
+
+        query.execute("create view "+Constants.PosHype+" as select rowid,sentiment from "+Constants.TeamSentiments+
+        " where not sentiment = 'negative'");
+
+
     }
 }

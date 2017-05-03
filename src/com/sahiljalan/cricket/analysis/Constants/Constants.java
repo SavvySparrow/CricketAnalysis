@@ -44,6 +44,11 @@ public class Constants {
     public static String SentimentView2 = "SentimentView2_Sample";
     public static String SentimentView3 = "SentimentView3_Sample";
 
+    public static String PosHype1 = "PosHype1";
+    public static String PosHype2 = "PosHype2";
+    public static String PosHype = "poshype_sample";
+
+
     public static String DictionaryLocation = "/home/sahiljalan/IdeaProjects/CricketAnalysis/data/dictionary.tsv";
     public static String TimeZoneLocation = "/home/sahiljalan/IdeaProjects/CricketAnalysis/data/timezone.tsv";
 
@@ -91,5 +96,9 @@ public class Constants {
 
     public static void TeamSentiments(String TSName) {
         TeamSentiments = TSName;
+    }
+
+    public static void setPosHype(String PHName){
+        PosHype = PHName;
     }
 }

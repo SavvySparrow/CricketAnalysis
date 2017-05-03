@@ -34,5 +34,7 @@ public class Main extends CricketAnalysis {
         //Analyse the Sentiments of Fans of Both The Teams
         ca.createSentimentsViews();
 
+
+        ca.calposhype();
     }
 }

@@ -15,12 +15,15 @@ public class CreateDB {
 
     public CreateDB() throws SQLException {
         query.execute("create database if Not EXISTS "+ Constants.DataBaseName);
+        //TODO Create Constant for this Database
+        query.execute("create database if not EXISTS Analaysed_Results");
         userDB();
     }
 
     public CreateDB(String DBName) throws SQLException {
         Constants.setDBName(DBName);
         query.execute("create database if Not EXISTS "+Constants.DataBaseName);
+        query.execute("create database if not EXISTS Analaysed_Results");
         userDB();
     }
 

@@ -5,9 +5,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 
+import com.sahiljalan.cricket.analysis.ClearTraces.Records;
 import com.sahiljalan.cricket.analysis.Constants.Constants;
 import com.sahiljalan.cricket.analysis.CricketAnalysis.CricketAnalysis;
-import com.sahiljalan.cricket.analysis.Main;
 
 /**
  * Created by sahiljalan on 28/4/17.
@@ -15,6 +15,7 @@ import com.sahiljalan.cricket.analysis.Main;
 public class RawTable extends TimeZone{
 
     private Statement query = CricketAnalysis.getStatement();
+    private Records clear = new Records();
     private static Timestamp timestamp;
 
     //Create Default TableName
@@ -33,10 +34,7 @@ public class RawTable extends TimeZone{
 
     void createTable() throws SQLException{
 
-        query.execute("SET hive.support.sql11.reserved.keywords=false");
-
-        System.out.println("Running : droping Raw Table");
-        query.execute("drop table if exists " + Constants.TableName);
+        clear.mainTable();
         System.out.println("Running : creating Raw Table");
         query.execute("create external table if NOT EXISTS " + Constants.TableName + " (id BIGINT," +
                 "   created_at STRING," +

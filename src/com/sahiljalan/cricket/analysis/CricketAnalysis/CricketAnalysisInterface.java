@@ -27,5 +27,11 @@ public interface CricketAnalysisInterface {
     void setLocation(String t,int y,String m,String d);
 
     void setLocation(String t,int y,String m,String d,int hour);
+
+    void startAnalysisService() throws InterruptedException;
+    void startCleaningService() throws InterruptedException;
+
+    void keepTablesAndViews();
+    void keepTablesAndViews(Boolean KTV);
 }
 

@@ -5,6 +5,8 @@ package com.sahiljalan.cricket.analysis.Constants;
  */
 public class Constants {
 
+    public static Boolean KeepTableAndViews = false;
+
     public static final String SerDeDriver = "org.openx.data.jsonserde.JsonSerDe";
     public static final String HiveDriver = "org.apache.hive.jdbc.HiveDriver";
     public static final String Team1Hashtags = "Team1_hashtagsView";

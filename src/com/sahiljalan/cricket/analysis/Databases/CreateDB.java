@@ -16,7 +16,6 @@ public class CreateDB {
 
     public CreateDB() throws SQLException {
         query.execute("create database if Not EXISTS "+ Constants.DataBaseName);
-        //TODO Create Constant for this Database
         query.execute("create database if not EXISTS "+ Constants.DataBaseAnalaysedResults);
         useDB();
     }

@@ -4,6 +4,8 @@ import com.sahiljalan.cricket.analysis.ConnectionToHive.HiveConnection;
 import com.sahiljalan.cricket.analysis.Constants.Constants;
 import com.sahiljalan.cricket.analysis.Constants.TeamName;
 import com.sahiljalan.cricket.analysis.Databases.CreateDB;
+import com.sahiljalan.cricket.analysis.Services.CleanService;
+import com.sahiljalan.cricket.analysis.Services.MainService;
 import com.sahiljalan.cricket.analysis.Storage.Storage;
 import com.sahiljalan.cricket.analysis.Tables.RawTable;
 import com.sahiljalan.cricket.analysis.TeamData.TeamHASHMENData;
@@ -16,6 +18,7 @@ import java.sql.Statement;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * Created by sahiljalan on 29/4/17.
@@ -26,12 +29,22 @@ public class CricketAnalysis implements CricketAnalysisInterface {
     Calendar cal;
     private int year,hour,min;
     private String month,day;
+    private static int count = 1;
+    public static int totalRecords;
+    private static CountDownLatch latch;
+    private static Thread startAnalysis;
+    private static Thread clearRecords;
 
     protected static void startConnection() throws SQLException, ClassNotFoundException {
-        HiveConnection startHive = new HiveConnection();
-        query = startHive.getConnection().createStatement();
+        HiveConnection.start();
+        query = HiveConnection.getConnection().createStatement();
+        query.execute("SET hive.support.sql11.reserved.keywords=false");
         query.execute("CREATE TEMPORARY FUNCTION NumberRows AS " +
                 "'com.sahil.jalan.UDFNumberRows'");
+    }
+
+    protected static void closeConnection() throws SQLException {
+        HiveConnection.close();
     }
     public static Statement getStatement() {
         return query;
@@ -150,6 +163,48 @@ public class CricketAnalysis implements CricketAnalysisInterface {
     @Override
     public void setLocation(String team,int year, String month, String day,int hour) {
         Constants.setLocation(team,year,month,day,hour);
+    }
+
+    @Override
+    public void startAnalysisService() throws InterruptedException {
+
+        System.out.println("\n\n\nAnalysis Application is Started\n\n\n");
+        while(getHour()!=19){
+
+            System.out.println("\nPerforming Analysis : "+(count++)+"\n");
+            latch = new CountDownLatch(1);
+            startAnalysis = new Thread(new MainService(latch));
+            startAnalysis.start();
+            latch.await();
+            System.out.println("\nTotal Record Inserted Today : "+(++totalRecords));
+
+        }
+        System.out.println("\n\n\nAnalysis Application is Stopped\n\n\n");
+
+    }
+
+    @Override
+    public void startCleaningService() throws InterruptedException {
+
+        if(!Constants.KeepTableAndViews){
+            System.out.println("Cleaning Service Started \nPlease Wait........\n");
+            latch = new CountDownLatch(1);
+            clearRecords = new Thread(new CleanService(latch));
+            clearRecords.start();
+            latch.await();
+            System.out.println("\nCleaning Service Completed.");
+        }
+
+    }
+
+    @Override
+    public void keepTablesAndViews() {
+        Constants.KeepTableAndViews  = false;
+    }
+
+    @Override
+    public void keepTablesAndViews(Boolean KeepTablesAndViews) {
+        Constants.KeepTableAndViews  = KeepTablesAndViews;
     }
 
 }

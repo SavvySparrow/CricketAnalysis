@@ -36,10 +36,6 @@ public class RawViews {
 
     private void createRawViews(TeamHASHMEN value) throws SQLException {
 
-        System.out.println("Running : creating Raw Views for Team "+count++);
-        query.execute("drop view if exists " + Constants.TeamHashtags);
-        query.execute("drop view if exists " + Constants.TeamMentions);
-
         query.execute("create view if NOT exists " + Constants.TeamHashtags + " " +
                 "as select cast ( from_unixtime( unix_timestamp" +
                 "(concat(substring(created_at,27,4),substring(created_at,4,15))," +

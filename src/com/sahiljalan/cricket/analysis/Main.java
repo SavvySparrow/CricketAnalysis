@@ -1,15 +1,12 @@
 package com.sahiljalan.cricket.analysis;
 
-import com.sahiljalan.cricket.analysis.ConnectionToHive.HiveConnection;
 import com.sahiljalan.cricket.analysis.Constants.Constants;
 import com.sahiljalan.cricket.analysis.Constants.TeamName;
 import com.sahiljalan.cricket.analysis.CricketAnalysis.CricketAnalysis;
-import com.sahiljalan.cricket.analysis.Service.Service;
+import com.sahiljalan.cricket.analysis.Services.CleanService;
+import com.sahiljalan.cricket.analysis.Services.MainService;
 
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -17,20 +14,15 @@ import java.util.concurrent.CountDownLatch;
  */
 public class Main extends CricketAnalysis{
 
-    private static int count = 1;
-    public static int totalRecords;
-    private static CountDownLatch latch;
-    private static Thread startAnalysis,startAnalysis2;
-
-    public static void main(String arg[]) throws SQLException, ClassNotFoundException {
+    public static void main(String arg[]) throws SQLException, ClassNotFoundException, InterruptedException {
 
 
         //Create Object of this class to access Non-Static methods of superClass
         CricketAnalysis ca = new CricketAnalysis();
+
+        //Set Location for ReadingData
         ca.setLocation("RCBvsKXIP",ca.getYear(),ca.getMonth(),ca.getDay(),ca.getHour());
-
-
-        System.out.println("Selected Working Data : "+Constants.Postfix_Location);
+        System.out.println("Selected Working Location : "+Constants.Postfix_Location);
 
         //Create Connection to Hive
         startConnection();
@@ -39,29 +31,18 @@ public class Main extends CricketAnalysis{
         //Initialize TeamHASHMENData
         ca.SetTeams(TeamName.BANGALURU,TeamName.PUNJAB);
 
-        //Select Database if exists,it will create new DataBase if Not Exits
-        //For Default Database pass empty parameter : selectDB();
-        ca.selectDB("ProjectCricket");
+        //Keep Tables & Views after analysis (For Debugging Purpose)
+        //Default value False (Empty Parameter = Default Value)
+        ca.keepTablesAndViews();
 
+        //Start Analysis on RealTime Data
+        ca.startAnalysisService();
 
-        while(ca.getHour()!=13){
+        //Start Cleaning After Analysis
+        //Dependencies : KeepTableAndViews(Boolean) : set True to start this service
+        ca.startCleaningService();
 
-            System.out.println("Performing Analysis : "+count++);
-            latch = new CountDownLatch(1);
-            startAnalysis = new Thread(new Service(latch));
-            startAnalysis.start();
-            try {
-                latch.await();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("Total Record Inserted Today : "+(++totalRecords));
-
-        }
-
-
-        System.out.println("Analysis is Complete Now....");
-        Connection con = HiveConnection.getConnection();
-        con.close();
+        closeConnection();
+        System.out.println("Connection is Successfully Closed");
     }
 }

@@ -37,10 +37,6 @@ public class SentimentsView {
 
     private void createSentimentsView() throws SQLException {
 
-        query.execute("drop view if EXISTS " + Constants.SentimentView1);
-        query.execute("drop view if EXISTS " + Constants.SentimentView2);
-        query.execute("drop view if EXISTS " + Constants.SentimentView3);
-
 
         query.execute("create view "+Constants.SentimentView1+" as select rowid,text, words from " +
                 Constants.TeamView +" lateral view explode(sentences(lower(text))) dummy as words");
@@ -59,9 +55,6 @@ public class SentimentsView {
                 "from "+Constants.SentimentView2+" c left outer join dictionary d on c.word = d.word");
 
 
-        query.execute("drop table if EXISTS " + Constants.TeamSentiments);
-
-
         query.execute("create table "+Constants.TeamSentiments+" as select " +
                 "rowid, " +
                 "case " +
@@ -70,7 +63,6 @@ public class SentimentsView {
                 "else 'neutral' end as sentiment " +
                 "from "+Constants.SentimentView3+" group by rowid");
 
-        query.execute("drop view if EXISTS " + Constants.PosHype);
 
         query.execute("create view "+Constants.PosHype+" as select rowid,sentiment from "+Constants.TeamSentiments+
         " where not sentiment = 'negative'");

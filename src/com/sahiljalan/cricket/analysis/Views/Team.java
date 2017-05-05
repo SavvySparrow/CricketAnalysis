@@ -31,9 +31,6 @@ public class Team {
 
     private void createTeamView() throws SQLException {
 
-        System.out.println("Running : droping " + Constants.TeamViewTemp + " View IF EXISTS");
-        query.execute("drop view if EXISTS " + Constants.TeamViewTemp);
-
         System.out.println("Running : creating " + Constants.TeamViewTemp + " View");
         query.execute("create view if NOT EXISTS " + Constants.TeamViewTemp + " as " +
                 "select m.* from " + Constants.TeamMentions +
@@ -45,9 +42,6 @@ public class Team {
                 "select h.* from " + Constants.TeamHashtags +
                 " h inner join " + Constants.TeamMentions + " m on (h.text = m.text) " +
                 "where ((h.created_at = m.created_at) AND (h.screen_name = m.screen_name))");
-
-        System.out.println("Running : droping " + Constants.TeamView + " View IF EXISTS");
-        query.execute("drop view if EXISTS " + Constants.TeamView);
 
         System.out.println("Running : creating " + Constants.TeamView + " View");
         query.execute("create view if not EXISTS "+Constants.TeamView +" as " +

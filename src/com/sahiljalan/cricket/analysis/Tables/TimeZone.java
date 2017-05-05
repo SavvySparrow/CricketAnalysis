@@ -1,6 +1,7 @@
 package com.sahiljalan.cricket.analysis.Tables;
 
 import com.sahiljalan.cricket.analysis.Constants.Constants;
+import com.sahiljalan.cricket.analysis.CricketAnalysis.CricketAnalysis;
 import com.sahiljalan.cricket.analysis.Main;
 
 import java.sql.SQLException;
@@ -11,7 +12,7 @@ import java.sql.Statement;
  */
 public class TimeZone extends Dictionary{
 
-    private Statement query = Main.getStatement();
+    private Statement query = CricketAnalysis.getStatement();
 
     public TimeZone() throws SQLException {
         //First it calls the default constructor of Dictionary than create TimeZoneTable

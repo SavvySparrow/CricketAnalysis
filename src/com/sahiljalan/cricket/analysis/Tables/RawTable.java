@@ -1,9 +1,12 @@
 package com.sahiljalan.cricket.analysis.Tables;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 
 import com.sahiljalan.cricket.analysis.Constants.Constants;
+import com.sahiljalan.cricket.analysis.CricketAnalysis.CricketAnalysis;
 import com.sahiljalan.cricket.analysis.Main;
 
 /**
@@ -11,7 +14,8 @@ import com.sahiljalan.cricket.analysis.Main;
  */
 public class RawTable extends TimeZone{
 
-    private Statement query = Main.getStatement();
+    private Statement query = CricketAnalysis.getStatement();
+    private static Timestamp timestamp;
 
     //Create Default TableName
     public RawTable() throws SQLException{
@@ -56,5 +60,15 @@ public class RawTable extends TimeZone{
                 "      time_zone:STRING>) " +
                 "ROW FORMAT SERDE '" + Constants.SerDeDriver + "' " +
                 "Location '" + Constants.Prefix_Location + Constants.Postfix_Location +"'");
+
+        ResultSet res = query.executeQuery("select from_unixtime(unix_timestamp" +
+                "(current_timestamp(),'yyyy MMM dd hh:mm:ss'))");
+        while (res.next()){
+            timestamp  = res.getTimestamp(1);
+        }
+    }
+
+    public static Timestamp getStartingTimeStamp(){
+        return timestamp;
     }
 }

@@ -1,9 +1,11 @@
 package com.sahiljalan.cricket.analysis.ConnectionToHive;
 
 import com.sahiljalan.cricket.analysis.Constants.Constants;
+import org.apache.hive.service.cli.session.HiveSession;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
@@ -12,7 +14,7 @@ import java.sql.SQLException;
 public class HiveConnection {
 
     private String DriverName = Constants.HiveDriver;
-    private Connection connection;
+    private static Connection connection;
 
     public HiveConnection() throws SQLException , ClassNotFoundException {
 
@@ -27,7 +29,7 @@ public class HiveConnection {
                 "sahiljalan","");
 
     }
-    public Connection getConnection(){
+    public static Connection getConnection(){
         return connection;
     }
 

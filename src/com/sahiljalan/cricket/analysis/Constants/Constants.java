@@ -16,13 +16,19 @@ public class Constants {
     public static final String Team2_Temp = "Team2_Temp";
     public static final String TEAM2_VIEW = "Team2View";
 
+    public static String Teams = "KXIPvsMI";
+    public static int year = 2017;
+    public static String month = "04";
+    public static String day = "20";
+    public static int hour = 20;
     public static final String Prefix_Location = "hdfs://localhost:9000/IPL";
-    public static String Postfix_Location = "/KXIPvsMI/year=2017/month=04/day=20/";
+    public static String Postfix_Location = "/"+Teams+"/year="+year+"/month="+month+"/day="+day+"/hour="+hour;
 
     public static String TableName = "Match_Buzz_Default";
     public static String DictionaryTable = "dictionary";
     public static String TimeZoneTable = "timezone";
     public static String DataBaseName = "Project_Cricket_Defualt";
+    public static String DataBaseAnalaysedResults = "Analaysed_Results";
 
     public static String TeamHashtags = "TeamHashtags_Sample";
     public static String TeamMentions = "TeamMentions_Sample";
@@ -51,6 +57,8 @@ public class Constants {
 
     public static String DictionaryLocation = "/home/sahiljalan/IdeaProjects/CricketAnalysis/data/dictionary.tsv";
     public static String TimeZoneLocation = "/home/sahiljalan/IdeaProjects/CricketAnalysis/data/timezone.tsv";
+    public static String TeamCodeLocation = "/home/sahiljalan/IdeaProjects/CricketAnalysis/data/TeamCodes.csv";
+    public static String TeamCodeTable = "TeamCodes";
 
 
     public static void setTableName(String TBName){
@@ -78,8 +86,31 @@ public class Constants {
     }
 
 
-    public static void setLocation(String Teams, String year,String month,String day){
+    public static void setLocation(int y,String m,String d){
+        year = y;
+        month = m;
+        day = d;
+    }
+
+    public static void setLocation(String m,String d){
+        month = m;
+        day = d;
+    }
+
+    public static void setLocation(String d){
+        day = d;
+    }
+    public static void setLocationWithOutHour(String Teams, int year,String month,String day){
         Postfix_Location = "/"+Teams+"/year="+year+"/month="+month+"/day="+day;
+    }
+
+    public static void setLocation(String t, int y,String m,String d,int h){
+        Teams = t;
+        year = y;
+        month = m;
+        day = d;
+        hour = h;
+        Postfix_Location = "/"+Teams+"/year="+year+"/month="+month+"/day="+day+"/hour="+hour;
     }
 
     public static void setsentimentView1(String SVName) {

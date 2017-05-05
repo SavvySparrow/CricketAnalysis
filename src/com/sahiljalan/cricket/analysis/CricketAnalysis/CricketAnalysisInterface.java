@@ -7,6 +7,8 @@ import java.sql.SQLException;
  */
 public interface CricketAnalysisInterface {
 
+    int getYear();String getMonth(); String getDay(); int getHour();int getMinuets();
+
     void SetTeams(String t1, String t2);
 
     void selectDB() throws SQLException;
@@ -18,8 +20,12 @@ public interface CricketAnalysisInterface {
     void createRawViews() throws SQLException;
     void createTeamViews() throws SQLException;
 
-    void createSentimentsViews() throws SQLException;
+    void createSentimentsViews(String t1,String t2) throws SQLException;
 
-    void calposhype() throws SQLException;
+    void storeResults() throws SQLException;
+
+    void setLocation(String t,int y,String m,String d);
+
+    void setLocation(String t,int y,String m,String d,int hour);
 }
 

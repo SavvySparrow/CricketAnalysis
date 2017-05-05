@@ -8,11 +8,11 @@ import java.util.Map;
 /**
  * Created by sahiljalan on 29/4/17.
  */
-public class TeamData {
+public class TeamHASHMENData {
 
     private static Map<String,TeamHASHMEN> map= new HashMap<>();
 
-    public TeamData(){
+    public TeamHASHMENData(){
         initializeTeamData();
     }
 

@@ -1,8 +1,10 @@
 package com.sahiljalan.cricket.analysis.Views.SentimentsView;
 
 import com.sahiljalan.cricket.analysis.Constants.Constants;
+import com.sahiljalan.cricket.analysis.CricketAnalysis.CricketAnalysis;
 import com.sahiljalan.cricket.analysis.Main;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -11,15 +13,15 @@ import java.sql.Statement;
  */
 public class SentimentsView {
 
-    private Statement query = Main.getStatement();
+    private Statement query = CricketAnalysis.getStatement();
 
-    public SentimentsView() throws SQLException {
+    public SentimentsView(String TeamView1,String TeamView2) throws SQLException {
 
         Constants.setsentimentView1(Constants.SentiViewT1V1);
         Constants.setsentimentView2(Constants.SentiViewT1V2);
         Constants.setsentimentView3(Constants.SentiViewT1V3);
         Constants.TeamSentiments(Constants.Team1Sentiments);
-        Constants.setTeamView(Constants.TEAM1_VIEW);
+        Constants.setTeamView(TeamView1);
         Constants.setPosHype(Constants.PosHype1);
         createSentimentsView();
 
@@ -27,7 +29,7 @@ public class SentimentsView {
         Constants.setsentimentView2(Constants.SentiViewT2V2);
         Constants.setsentimentView3(Constants.SentiViewT2V3);
         Constants.TeamSentiments(Constants.Team2Sentiments);
-        Constants.setTeamView(Constants.TEAM2_VIEW);
+        Constants.setTeamView(TeamView2);
         Constants.setPosHype(Constants.PosHype2);
         createSentimentsView();
 
@@ -40,15 +42,15 @@ public class SentimentsView {
         query.execute("drop view if EXISTS " + Constants.SentimentView3);
 
 
-        query.execute("create view "+Constants.SentimentView1+" as select rowid," +
-                " words from " +Constants.TeamView +" lateral " +
-                "view explode(sentences(lower(text))) dummy as words");
+        query.execute("create view "+Constants.SentimentView1+" as select rowid,text, words from " +
+                Constants.TeamView +" lateral view explode(sentences(lower(text))) dummy as words");
 
-        query.execute("create view "+Constants.SentimentView2+" as select rowid," +
+        query.execute("create view "+Constants.SentimentView2+" as select rowid,text," +
                 " word from "+Constants.SentimentView1+" lateral " +
                 "view explode(words) dummy as word");
 
-        query.execute("create view "+Constants.SentimentView3+" as select rowid," +
+        query.execute("create view "+Constants.SentimentView3+" as select " +
+                "rowid," +
                 "c.word, " +
                 "case d.polarity " +
                 "   when 'negative' then -1" +
@@ -59,7 +61,7 @@ public class SentimentsView {
 
         query.execute("drop table if EXISTS " + Constants.TeamSentiments);
 
-        
+
         query.execute("create table "+Constants.TeamSentiments+" as select " +
                 "rowid, " +
                 "case " +
@@ -72,7 +74,5 @@ public class SentimentsView {
 
         query.execute("create view "+Constants.PosHype+" as select rowid,sentiment from "+Constants.TeamSentiments+
         " where not sentiment = 'negative'");
-
-
     }
 }

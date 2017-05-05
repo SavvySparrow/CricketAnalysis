@@ -4,7 +4,7 @@ import com.sahiljalan.cricket.analysis.Constants.Constants;
 import com.sahiljalan.cricket.analysis.Constants.TeamName;
 import com.sahiljalan.cricket.analysis.CricketAnalysis.CricketAnalysis;
 import com.sahiljalan.cricket.analysis.TeamData.TeamHASHMEN;
-import com.sahiljalan.cricket.analysis.TeamData.TeamData;
+import com.sahiljalan.cricket.analysis.TeamData.TeamHASHMENData;
 
 import java.sql.Statement;
 import java.sql.SQLException;
@@ -18,7 +18,7 @@ public class RawViews {
     private int count=1;
     private TeamHASHMEN value;
     private Statement query = CricketAnalysis.getStatement();
-    private Map<String,TeamHASHMEN> map = TeamData.getMAP();
+    private Map<String,TeamHASHMEN> map = TeamHASHMENData.getMAP();
 
     public RawViews() throws SQLException{
         System.out.println("Running : RawViews class");

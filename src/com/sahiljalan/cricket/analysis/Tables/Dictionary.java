@@ -1,7 +1,9 @@
 package com.sahiljalan.cricket.analysis.Tables;
 
 import com.sahiljalan.cricket.analysis.Constants.Constants;
+import com.sahiljalan.cricket.analysis.CricketAnalysis.CricketAnalysis;
 import com.sahiljalan.cricket.analysis.Main;
+import com.sahiljalan.cricket.analysis.TeamData.TeamCodes;
 
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -9,11 +11,12 @@ import java.sql.Statement;
 /**
  * Created by sahiljalan on 28/4/17.
  */
-public class Dictionary {
+public class Dictionary extends TeamCodes{
 
-    private Statement query = Main.getStatement();
+    private Statement query = CricketAnalysis.getStatement();
 
     public Dictionary() throws SQLException {
+        //First it calls the default constructor of TeamCodes than create Dictionary
         System.out.println("Running : Dictionary class");
         createDictionaryTable();
     }

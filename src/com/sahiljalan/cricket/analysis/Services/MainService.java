@@ -27,10 +27,6 @@ public class MainService extends CricketAnalysis implements Runnable {
 
         CricketAnalysis ca = new CricketAnalysis();
 
-        //HDFS Location : Folder Partition Format (Team1vsTeam2/year/month/day/hour)
-        ca.setLocation("RCBvsKXIP",ca.getYear(),ca.getMonth(),ca.getDay(),ca.getHour());
-
-
             try {
 
                     //Select Database if exists,it will create new DataBase if Not Exists

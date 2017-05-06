@@ -95,6 +95,7 @@ public class Storage {
         preparedStatement.setTimestamp(5,endingTimeStamp);
         preparedStatement.setLong(6,t1c);
         preparedStatement.setLong(7,t2c);
+        System.out.println(code+" "+t1c+" "+t2c+" "+RawTable.getStartingTimeStamp());
 
 
         int i=preparedStatement.executeUpdate()+1;

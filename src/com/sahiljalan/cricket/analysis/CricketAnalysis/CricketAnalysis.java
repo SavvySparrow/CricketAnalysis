@@ -8,6 +8,7 @@ import com.sahiljalan.cricket.analysis.Services.CleanService;
 import com.sahiljalan.cricket.analysis.Services.MainService;
 import com.sahiljalan.cricket.analysis.Storage.Storage;
 import com.sahiljalan.cricket.analysis.Tables.RawTable;
+import com.sahiljalan.cricket.analysis.Tables.TimeZone;
 import com.sahiljalan.cricket.analysis.TeamData.TeamHASHMENData;
 import com.sahiljalan.cricket.analysis.Views.RawViews;
 import com.sahiljalan.cricket.analysis.Views.SentimentsView.SentimentsView;
@@ -109,21 +110,12 @@ public class CricketAnalysis implements CricketAnalysisInterface {
 
     @Override
     public void createRawTable() throws SQLException {
-        new RawTable();
-
-        //Generate Raw Views
-        //Four Raw Views : Two For Each TeamView
-        //one Hashtag and one Mention View for each TeamView
-        createRawViews();
-
-        //Generate Teams View using RawViews where we actual start queries
-        //These Views are generated from RawViews
-        createTeamViews();
     }
 
     @Override
     public void createRawTable(String TableName) throws SQLException {
         new RawTable(TableName);
+        new TimeZone();
 
         //Generate Raw Views
         //Four Raw Views : Two For Each TeamView
@@ -166,16 +158,21 @@ public class CricketAnalysis implements CricketAnalysisInterface {
     }
 
     @Override
-    public void startAnalysisService() throws InterruptedException {
+    public void startAnalysisService() {
 
         System.out.println("\n\n\nAnalysis Application is Started\n\n\n");
-        while(getHour()!=19){
+        while(getHour()!=23){
+
 
             System.out.println("\nPerforming Analysis : "+(count++)+"\n");
             latch = new CountDownLatch(1);
             startAnalysis = new Thread(new MainService(latch));
             startAnalysis.start();
-            latch.await();
+            try {
+                latch.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             System.out.println("\nTotal Record Inserted Today : "+(++totalRecords));
 
         }

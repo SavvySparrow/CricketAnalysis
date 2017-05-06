@@ -3,6 +3,7 @@ package com.sahiljalan.cricket.analysis.ClearTraces;
 import com.sahiljalan.cricket.analysis.Constants.Constants;
 import com.sahiljalan.cricket.analysis.CricketAnalysis.CricketAnalysis;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -11,12 +12,20 @@ import java.sql.Statement;
  */
 public class Records implements Tables , Views {
 
-    private Statement query = CricketAnalysis.getStatement();
+    private static Statement query = CricketAnalysis.getStatement();
 
     public Records() throws SQLException {
-        //Constants.setDBName("projectcricket");
-        //Constants.setTableName("matchbuzz");
+        //Constants.setDBName("projectcricket");Constants.setTableName("matchbuzz");
         query.execute("use "+ Constants.DataBaseName);
+    }
+
+    public static Boolean isEmpty() throws SQLException {
+        query.execute("use projectcricket");
+        ResultSet res = query.executeQuery("show tables");
+        while(res.next()){}
+        if(res.getRow()==0)
+            return true;
+        return false;
     }
 
     public void clearAllRecords() throws SQLException{
@@ -40,6 +49,7 @@ public class Records implements Tables , Views {
         query.execute("drop view if exists " + Constants.Team1Mentions);
         query.execute("drop view if exists " + Constants.Team2Hashtags);
         query.execute("drop view if exists " + Constants.Team2Mentions);
+        query.execute("drop view if exists rawtableview");
     }
 
     @Override
@@ -67,6 +77,7 @@ public class Records implements Tables , Views {
         query.execute("drop view if EXISTS " + Constants.PosHype2);
     }
 
+
     @Override
     public void clearAllTables() throws SQLException {
         mainTable();
@@ -79,6 +90,7 @@ public class Records implements Tables , Views {
     public void mainTable() throws SQLException {
         System.out.println("Running : Cleaning Raw Table from Records IF EXISTS");
         query.execute("drop table if exists " + Constants.TableName);
+        query.execute("drop table if exists rawtable_temp");
     }
 
     @Override

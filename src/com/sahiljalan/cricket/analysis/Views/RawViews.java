@@ -37,18 +37,14 @@ public class RawViews {
     private void createRawViews(TeamHASHMEN value) throws SQLException {
 
         query.execute("create view if NOT exists " + Constants.TeamHashtags + " " +
-                "as select cast ( from_unixtime( unix_timestamp" +
-                "(concat(substring(created_at,27,4),substring(created_at,4,15))," +
-                "'yyyy MMM dd hh:mm:ss')) as timestamp) ts," +
+                "as select " +
                 "user.screen_name,user.verified,created_at,user.time_zone,text " +
                 "from " + Constants.TableName + " " +
                 "lateral view explode(entities.hashtags.text) team1 as hashtags " +
                 "where hashtags like '"+value.getHashtag()+"'");
 
         query.execute("create view if NOT exists " + Constants.TeamMentions + " " +
-                "as select cast ( from_unixtime( unix_timestamp" +
-                "(concat(substring(created_at,27,4),substring(created_at,4,15))," +
-                "'yyyy MMM dd hh:mm:ss')) as timestamp) ts," +
+                "as select " +
                 "user.screen_name,user.verified,created_at,user.time_zone,text " +
                 "from " + Constants.TableName + " " +
                 "lateral view explode(entities.user_mentions.screen_name) team1 as mentions " +

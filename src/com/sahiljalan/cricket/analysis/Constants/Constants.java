@@ -103,7 +103,7 @@ public class Constants {
         day = d;
     }
     public static void setLocationWithOutHour(String Teams, int year,String month,String day){
-        Postfix_Location = "/"+Teams+"/year="+year+"/month="+month+"/day="+day;
+        Postfix_Location = "/"+Teams+"/year="+year+"/month="+month+"/day="+day+"/";
     }
 
     public static void setLocation(String t, int y,String m,String d,int h){
@@ -112,7 +112,7 @@ public class Constants {
         month = m;
         day = d;
         hour = h;
-        Postfix_Location = "/"+Teams+"/year="+year+"/month="+month+"/day="+day+"/hour="+hour;
+        Postfix_Location = "/"+Teams+"/year="+year+"/month="+month+"/day="+day+"/hour="+hour+"/";
     }
 
     public static void setsentimentView1(String SVName) {

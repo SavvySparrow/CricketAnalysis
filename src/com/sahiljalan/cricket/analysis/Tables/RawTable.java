@@ -16,7 +16,7 @@ public class RawTable {
 
     private Statement query = CricketAnalysis.getStatement();
     private Records clear = new Records();
-    private static Timestamp GMTtimestamp,UTCtimestamp,GMTtimestampCopy;
+    private static Timestamp UTCtimestamp, UTCtimestampCopy;
 
     //Create Default TableName
     /*public RawTable() throws SQLException{
@@ -28,14 +28,14 @@ public class RawTable {
     public RawTable(String TableName) throws SQLException{
 
         if(Records.isEmpty()){
-            System.out.println("Running : Records EMPTY? ----->" + Records.isEmpty());
+            System.out.println("Running : Records EMPTY? ----->" + Records.isRunningFirstTime);
             Constants.setTableName(TableName);
             createTable();
         }else{
-            System.out.println("Running : Records EMPTY? -----> " + Records.isEmpty());
+            System.out.println("Running : Records EMPTY? -----> " + Records.isRunningFirstTime);
             clear.mainTable();
             Constants.setTableName("rawtable_temp");
-            GMTtimestampCopy = GMTtimestamp;
+            UTCtimestampCopy = UTCtimestamp;
             createTable();
             Constants.setTableName(TableName);
             createTableView();
@@ -45,15 +45,13 @@ public class RawTable {
     public void createTableView() throws SQLException {
 
         System.out.println("Running : creating Raw Table View");
-
-        //TODO Casting Seconds is Not Matching with original twitter timestamp
         query.execute("create view rawtableview as select (cast(from_unixtime(unix_timestamp(" +
                 "concat(substring(created_at,27,4),substring(created_at,4,16))," +
                 "'yyyy MMM dd hh:mm:ss')) as timestamp)) ts,* from rawtable_temp");
 
 
         System.out.println("Running : creating Raw Table View matchbuzz");
-        query.execute("CREATE table "+Constants.TableName+" as select * from rawtableview where ts > '"+GMTtimestampCopy+"'");
+        query.execute("CREATE table "+Constants.TableName+" as select * from rawtableview where ts > '"+ UTCtimestampCopy +"'");
 
 
     }
@@ -85,20 +83,17 @@ public class RawTable {
                 "ROW FORMAT SERDE '" + Constants.SerDeDriver + "' " +
                 "Location '" + Constants.Prefix_Location + Constants.Postfix_Location +"'");
 
+        System.out.println("Running : creating Timestamp");
         ResultSet res = query.executeQuery("select to_utc_timestamp(from_unixtime(unix_timestamp" +
                 "(current_timestamp(),'yyyy MMM dd hh:mm:ss')),'IST')");
         while (res.next()){
-            GMTtimestamp = res.getTimestamp(1);
+            UTCtimestamp = res.getTimestamp(1);
         }
     }
 
 
     public static Timestamp getStartingTimeStamp() throws SQLException {
 
-        /*ResultSet res = CricketAnalysis.getStatement().executeQuery("select to_utc_timestamp("+GMTtimestamp+",'CST')");
-        while (res.next()){
-            UTCtimestamp  = res.getTimestamp(1);
-        }*/
-        return GMTtimestamp;
+        return UTCtimestamp;
     }
 }

@@ -12,6 +12,8 @@ import java.sql.Statement;
  */
 public class Records implements Tables , Views {
 
+    public static Boolean isRunningFirstTime = true;
+
     private static Statement query = CricketAnalysis.getStatement();
 
     public Records() throws SQLException {
@@ -23,8 +25,10 @@ public class Records implements Tables , Views {
         query.execute("use projectcricket");
         ResultSet res = query.executeQuery("show tables");
         while(res.next()){}
-        if(res.getRow()==0)
+        if(res.getRow()==0){
             return true;
+        }
+        isRunningFirstTime=false;
         return false;
     }
 

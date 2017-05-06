@@ -16,7 +16,7 @@ public class RawTable {
 
     private Statement query = CricketAnalysis.getStatement();
     private Records clear = new Records();
-    private static Timestamp UTCtimestamp, UTCtimestampCopy;
+    private static Timestamp ISTtimestamp,UTCtimestamp, UTCtimestampCopy;
 
     //Create Default TableName
     /*public RawTable() throws SQLException{
@@ -28,14 +28,16 @@ public class RawTable {
     public RawTable(String TableName) throws SQLException{
 
         if(Records.isEmpty()){
-            System.out.println("Running : Records EMPTY? ----->" + Records.isRunningFirstTime);
+            System.out.println("Running : Records EMPTY? -----> " + Records.isRunningFirstTime);
             Constants.setTableName(TableName);
+            System.out.println("Running : creating Raw Table");
             createTable();
         }else{
             System.out.println("Running : Records EMPTY? -----> " + Records.isRunningFirstTime);
             clear.mainTable();
             Constants.setTableName("rawtable_temp");
             UTCtimestampCopy = UTCtimestamp;
+            System.out.println("Running : creating Raw Table Temp");
             createTable();
             Constants.setTableName(TableName);
             createTableView();
@@ -53,13 +55,11 @@ public class RawTable {
         System.out.println("Running : creating Raw Table View matchbuzz");
         query.execute("CREATE table "+Constants.TableName+" as select * from rawtableview where ts > '"+ UTCtimestampCopy +"'");
 
-
     }
 
 
     public void createTable() throws SQLException{
 
-        System.out.println("Running : creating Raw Table");
         query.execute("create external table if NOT EXISTS " + Constants.TableName + " (id BIGINT," +
                 "   created_at STRING," +
                 "   retweet_count INT," +
@@ -89,11 +89,23 @@ public class RawTable {
         while (res.next()){
             UTCtimestamp = res.getTimestamp(1);
         }
+
+        //TODO Creating time in IST may not be correct
+        System.out.println("Running : creating Timestamp");
+        res = query.executeQuery("select from_unixtime(unix_timestamp" +
+                "(current_timestamp(),'yyyy MMM dd hh:mm:ss'))");
+        while (res.next()){
+            ISTtimestamp = res.getTimestamp(1);
+        }
     }
 
 
-    public static Timestamp getStartingTimeStamp() throws SQLException {
+    public static Timestamp getStartingUTCTimeStamp() throws SQLException {
 
         return UTCtimestamp;
+    }
+    public static Timestamp getStartingISTTimeStamp() throws SQLException {
+
+        return ISTtimestamp;
     }
 }

@@ -14,6 +14,8 @@ import com.sahiljalan.cricket.analysis.Views.RawViews;
 import com.sahiljalan.cricket.analysis.Views.SentimentsView.SentimentsView;
 import com.sahiljalan.cricket.analysis.Views.Team;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.Statement;
 
 import java.sql.SQLException;
@@ -132,33 +134,42 @@ public class CricketAnalysis implements CricketAnalysisInterface {
     @Override
     public void setLocation(String team,int year, String month, String day) {
         Constants.setLocationWithOutHour(team,year,month,day);
+        System.out.println("Selected Working Location : "+Constants.Postfix_Location);
     }
 
     @Override
     public void setLocation(String team,int year, String month, String day,int hour) {
         Constants.setLocation(team,year,month,day,hour);
+        System.out.println("Selected Working Location : "+Constants.Postfix_Location);
     }
 
     @Override
-    public void startAnalysisService() {
+    public void startAnalysisService(){
 
-        System.out.println("\n\n\nAnalysis Application is Started\n\n\n");
-        while(getHour()!=Constants.setStopHour){
+        if(Constants.setStopHour == getHour()){
+            System.out.println("Stop Hour must not be equal to current hour \nCheck/Try Again....");
+            System.exit(1);
+        }else{
+            System.out.println("\n\n\nAnalysis Application is Started\n\n\n");
+            while(getHour()!=Constants.setStopHour){
 
+                System.out.println("\nPerforming Analysis : "+(count++)+"\n");
+                latch = new CountDownLatch(1);
+                startAnalysis = new Thread(new MainService(latch));
+                startAnalysis.start();
+                try {
+                    latch.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    System.exit(1);
+                }
+                System.out.println("\nTotal Record Inserted Today : "+(++totalRecords));
 
-            System.out.println("\nPerforming Analysis : "+(count++)+"\n");
-            latch = new CountDownLatch(1);
-            startAnalysis = new Thread(new MainService(latch));
-            startAnalysis.start();
-            try {
-                latch.await();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
-            System.out.println("\nTotal Record Inserted Today : "+(++totalRecords));
-
+            Storage.AfterAnalysisStorage();
+            System.out.println("\n\n\nAnalysis Application is Stopped\n\n\n");
         }
-        System.out.println("\n\n\nAnalysis Application is Stopped\n\n\n");
+
 
     }
 
@@ -187,8 +198,13 @@ public class CricketAnalysis implements CricketAnalysisInterface {
     }
 
     @Override
-    public void setStopHour(int stopHour) {
-        stopHour = getHour()+stopHour;
+    public void setStopHour() {
+        System.out.println("Stop Hour cannot be null\nPlease Specify Stop Hour using setStopHour()");
+        System.exit(1);
+    }
+
+    @Override
+    public void setStopHour(int stopHour){
         Constants.setStopHour = stopHour;
     }
 

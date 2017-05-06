@@ -32,6 +32,7 @@ public interface CricketAnalysisInterface {
     void keepTablesAndViews();
     void keepTablesAndViews(Boolean KTV);
 
+    void setStopHour();
     void setStopHour(int stopHour);
 
     void startAnalysisService() throws InterruptedException;

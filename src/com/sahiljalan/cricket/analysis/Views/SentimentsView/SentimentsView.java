@@ -17,6 +17,7 @@ public class SentimentsView {
 
     public SentimentsView(String TeamView1,String TeamView2) throws SQLException {
 
+        System.out.println("\nSentiment Analysis Application is Started.");
         Constants.setsentimentView1(Constants.SentiViewT1V1);
         Constants.setsentimentView2(Constants.SentiViewT1V2);
         Constants.setsentimentView3(Constants.SentiViewT1V3);
@@ -24,6 +25,7 @@ public class SentimentsView {
         Constants.setTeamView(TeamView1);
         Constants.setPosHype(Constants.PosHype1);
         createSentimentsView();
+        System.out.println("Team 1 Analysis Completed..");
 
         Constants.setsentimentView1(Constants.SentiViewT2V1);
         Constants.setsentimentView2(Constants.SentiViewT2V2);
@@ -32,11 +34,10 @@ public class SentimentsView {
         Constants.setTeamView(TeamView2);
         Constants.setPosHype(Constants.PosHype2);
         createSentimentsView();
-
+        System.out.println("Team 2 Analysis Completed...");
     }
 
     private void createSentimentsView() throws SQLException {
-
 
         query.execute("create view "+Constants.SentimentView1+" as select rowid,text, words from " +
                 Constants.TeamView +" lateral view explode(sentences(lower(text))) dummy as words");
@@ -62,7 +63,6 @@ public class SentimentsView {
                 "  when sum( polarity ) < 0 then 'negative'  " +
                 "else 'neutral' end as sentiment " +
                 "from "+Constants.SentimentView3+" group by rowid");
-
 
         query.execute("create view "+Constants.PosHype+" as select rowid,sentiment from "+Constants.TeamSentiments+
         " where not sentiment = 'negative'");

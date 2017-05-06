@@ -17,7 +17,8 @@ public class Records implements Tables , Views {
     private static Statement query = CricketAnalysis.getStatement();
 
     public Records() throws SQLException {
-        //Constants.setDBName("projectcricket");Constants.setTableName("matchbuzz");
+        Constants.setDBName("projectcricket");
+        //Constants.setTableName("matchbuzz");
         query.execute("use "+ Constants.DataBaseName);
     }
 

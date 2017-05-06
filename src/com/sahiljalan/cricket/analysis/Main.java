@@ -26,7 +26,7 @@ public class Main extends CricketAnalysis{
         //Initialize TeamHASHMENData
         ca.SetTeams(TeamName.DELHI,TeamName.MUMBAI);
 
-        //Set how Maximum hours you want to do Realtime Processing
+        //Set Maximum hours(SEE EXMAPLE BELOW) you want to do Processing on RealTime Data
         //After set hours application will stop processing and close the connection
         //Maximum Duration of Running 23 Hours , Must Be Specify
         //Example : If setStopHour(16) , means it will stop at 4 Pm IST

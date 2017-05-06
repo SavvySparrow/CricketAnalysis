@@ -90,7 +90,6 @@ public class RawTable {
             UTCtimestamp = res.getTimestamp(1);
         }
 
-        //TODO Creating time in IST may not be correct
         System.out.println("Running : creating Timestamp");
         res = query.executeQuery("select from_unixtime(unix_timestamp" +
                 "(current_timestamp(),'yyyy MMM dd hh:mm:ss'))");

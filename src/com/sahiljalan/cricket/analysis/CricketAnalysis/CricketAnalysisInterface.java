@@ -1,13 +1,14 @@
 package com.sahiljalan.cricket.analysis.CricketAnalysis;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * Created by sahiljalan on 29/4/17.
  */
 public interface CricketAnalysisInterface {
 
-    int getYear();String getMonth(); String getDay(); int getHour();int getMinuets();
 
     void SetTeams(String t1, String t2);
 
@@ -28,10 +29,12 @@ public interface CricketAnalysisInterface {
 
     void setLocation(String t,int y,String m,String d,int hour);
 
-    void startAnalysisService() throws InterruptedException;
-    void startCleaningService() throws InterruptedException;
-
     void keepTablesAndViews();
     void keepTablesAndViews(Boolean KTV);
+
+    void setStopHour(int stopHour);
+
+    void startAnalysisService() throws InterruptedException;
+    void startCleaningService() throws InterruptedException;
 }
 

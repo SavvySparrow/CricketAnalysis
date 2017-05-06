@@ -61,6 +61,7 @@ public class Constants {
     public static String TimeZoneLocation = "/home/sahiljalan/IdeaProjects/CricketAnalysis/data/timezone.tsv";
     public static String TeamCodeLocation = "/home/sahiljalan/IdeaProjects/CricketAnalysis/data/TeamCodes.csv";
     public static String TeamCodeTable = "TeamCodes";
+    public static int setStopHour;
 
 
     public static void setTableName(String TBName){

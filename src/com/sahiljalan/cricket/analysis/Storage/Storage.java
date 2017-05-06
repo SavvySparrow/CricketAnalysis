@@ -38,6 +38,7 @@ public class Storage {
         startingUtcTimeStamp = RawTable.getStartingTimeStamp();
         team1hash = map.get(TeamName.TEAM1).getHashtag();
         team2hash = map.get(TeamName.TEAM2).getHashtag();
+
         res = query.executeQuery("select code from "+Constants.TeamCodeTable+
                 " where teambattle = '"+team1hash+"VS"+team2hash+"'");
         while (res.next()) {
@@ -63,7 +64,7 @@ public class Storage {
 
         query.execute("use "+Constants.DataBaseAnalaysedResults);
 
-        if(Integer.parseInt(sdf.format(cal.getTime()))==23){
+        if(new CricketAnalysis().getHour()==23){
             query.execute("drop table if Exists ipl_cricketHour");
         }
 

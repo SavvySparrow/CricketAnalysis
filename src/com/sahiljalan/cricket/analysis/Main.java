@@ -22,7 +22,7 @@ public class Main extends CricketAnalysis{
         CricketAnalysis ca = new CricketAnalysis();
 
         //HDFS Location : Folder Partition Format (Team1vsTeam2/year/month/day/hour)
-        ca.setLocation("DDvsMI",ca.getYear(),ca.getMonth(),ca.getDay(),ca.getHour());
+        ca.setLocation("DDvsMI",getYear(),getMonth(),getDay(),getHour());
         System.out.println("Selected Working Location : "+Constants.Postfix_Location);
 
         //Create Connection to Hive
@@ -33,10 +33,14 @@ public class Main extends CricketAnalysis{
         //Initialize TeamHASHMENData
         ca.SetTeams(TeamName.DELHI,TeamName.MUMBAI);
 
+        //Set how many hours you want to do Realtime Processing
+        //After set hours application will stop processing and close the connection
+        //Max 24 Hours
+        ca.setStopHour(1);
+
         //Keep Tables & Views after analysis (For Debugging Purpose)
         //Default value is False (Empty Parameter = Default Value)
         ca.keepTablesAndViews();
-
 
         //Start Analysis on RealTime Data
         ca.startAnalysisService();

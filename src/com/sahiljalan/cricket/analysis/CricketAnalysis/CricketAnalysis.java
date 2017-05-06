@@ -27,9 +27,6 @@ import java.util.concurrent.CountDownLatch;
 public class CricketAnalysis implements CricketAnalysisInterface {
 
     private static Statement query;
-    Calendar cal;
-    private int year,hour,min;
-    private String month,day;
     private static int count = 1;
     public static int totalRecords;
     private static CountDownLatch latch;
@@ -52,44 +49,29 @@ public class CricketAnalysis implements CricketAnalysisInterface {
     }
 
 
-    @Override
-    public int getYear() {
-        cal = Calendar.getInstance();
+    public static int getYear() {
         SimpleDateFormat sdf = new SimpleDateFormat("YYYY");
-        year = Integer.parseInt(sdf.format(cal.getTime()));
-        return year;
+        return Integer.parseInt(sdf.format(Calendar.getInstance().getTime()));
     }
 
-    @Override
-    public String getMonth() {
-        cal = Calendar.getInstance();
+    public static String getMonth() {
         SimpleDateFormat sdf = new SimpleDateFormat("MM");
-        month = sdf.format(cal.getTime());
-        return month;
+        return sdf.format(Calendar.getInstance().getTime());
     }
 
-    @Override
-    public String getDay() {
-        cal = Calendar.getInstance();
+    public static String getDay() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd");
-        day = sdf.format(cal.getTime());
-        return day;
+        return sdf.format(Calendar.getInstance().getTime());
     }
 
-    @Override
-    public int getHour() {
-        cal = Calendar.getInstance();
+    public static int getHour() {
         SimpleDateFormat sdf = new SimpleDateFormat("HH");
-        hour = Integer.parseInt(sdf.format(cal.getTime()));
-        return hour;
+        return Integer.parseInt(sdf.format(Calendar.getInstance().getTime()));
     }
 
-    @Override
-    public int getMinuets() {
-        cal = Calendar.getInstance();
+    public static int getMinuets() {
         SimpleDateFormat sdf = new SimpleDateFormat("mm");
-        min = Integer.parseInt(sdf.format(cal.getTime()));
-        return min;
+        return Integer.parseInt(sdf.format(Calendar.getInstance().getTime()));
     }
 
     @Override
@@ -161,7 +143,7 @@ public class CricketAnalysis implements CricketAnalysisInterface {
     public void startAnalysisService() {
 
         System.out.println("\n\n\nAnalysis Application is Started\n\n\n");
-        while(getHour()!=23){
+        while(getHour()!=Constants.setStopHour){
 
 
             System.out.println("\nPerforming Analysis : "+(count++)+"\n");
@@ -202,6 +184,12 @@ public class CricketAnalysis implements CricketAnalysisInterface {
     @Override
     public void keepTablesAndViews(Boolean KeepTablesAndViews) {
         Constants.KeepTableAndViews  = KeepTablesAndViews;
+    }
+
+    @Override
+    public void setStopHour(int stopHour) {
+        stopHour = getHour()+stopHour;
+        Constants.setStopHour = stopHour;
     }
 
 }

@@ -1,10 +1,8 @@
-package com.sahiljalan.cricket.analysis.Views.SentimentsView;
+package com.sahiljalan.cricket.analysis.Views.AnalysisViews;
 
 import com.sahiljalan.cricket.analysis.Constants.Constants;
 import com.sahiljalan.cricket.analysis.CricketAnalysis.CricketAnalysis;
-import com.sahiljalan.cricket.analysis.Main;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 

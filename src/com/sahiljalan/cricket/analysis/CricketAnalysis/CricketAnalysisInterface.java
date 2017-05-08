@@ -37,5 +37,7 @@ public interface CricketAnalysisInterface {
 
     void startAnalysisService() throws InterruptedException;
     void startCleaningService() throws InterruptedException;
+
+    void setCurrentTimeZone(String ist);
 }
 

@@ -11,11 +11,9 @@ import com.sahiljalan.cricket.analysis.Tables.RawTable;
 import com.sahiljalan.cricket.analysis.Tables.TimeZone;
 import com.sahiljalan.cricket.analysis.TeamData.TeamHASHMENData;
 import com.sahiljalan.cricket.analysis.Views.RawViews;
-import com.sahiljalan.cricket.analysis.Views.SentimentsView.SentimentsView;
+import com.sahiljalan.cricket.analysis.Views.AnalysisViews.SentimentsView;
 import com.sahiljalan.cricket.analysis.Views.Team;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.Statement;
 
 import java.sql.SQLException;
@@ -164,13 +162,17 @@ public class CricketAnalysis implements CricketAnalysisInterface {
                     System.exit(1);
                 }
                 System.out.println("\nTotal Record Inserted Today : "+(++totalRecords));
-
             }
-            Storage.AfterAnalysisStorage();
             System.out.println("\n\n\nAnalysis Application is Stopped\n\n\n");
+            System.out.println("\nStarting After Analysis Storage.");
+            Storage.AfterAnalysisStorage();
+            System.out.println("Record Inserted into Database Successfully....");
+            try {
+                query.execute("drop table if Exists ipl_cricketHour");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-
-
     }
 
     @Override
@@ -185,6 +187,11 @@ public class CricketAnalysis implements CricketAnalysisInterface {
             System.out.println("\nCleaning Service Completed.");
         }
 
+    }
+
+    @Override
+    public void setCurrentTimeZone(String timezone) {
+        Constants.currentTimeZone = timezone;
     }
 
     @Override

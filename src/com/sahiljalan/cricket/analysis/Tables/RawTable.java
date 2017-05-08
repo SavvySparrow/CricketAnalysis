@@ -85,7 +85,7 @@ public class RawTable {
 
         System.out.println("Running : creating Timestamp");
         ResultSet res = query.executeQuery("select to_utc_timestamp(from_unixtime(unix_timestamp" +
-                "(current_timestamp(),'yyyy MMM dd hh:mm:ss')),'IST')");
+                "(current_timestamp(),'yyyy MMM dd hh:mm:ss')),'"+Constants.currentTimeZone+"')");
         while (res.next()){
             UTCtimestamp = res.getTimestamp(1);
         }

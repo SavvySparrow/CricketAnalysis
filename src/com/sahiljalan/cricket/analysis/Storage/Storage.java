@@ -134,26 +134,26 @@ public class Storage {
     public static void AfterAnalysisStorage(){
 
         try {
+            query.execute("use " + Constants.DataBaseAnalaysedResults);
             ResultSet res = query.executeQuery("select from_unixtime(unix_timestamp" +
                     "(current_timestamp(),'yyyy MMM dd hh:mm:ss'))");
             while (res.next()){
                 dayLastTimeStamp = res.getTimestamp(1);
             }
-            res = query.executeQuery("select sum(team1_count) from ipl_crickethour");
+            res = query.executeQuery("select sum(team1_count) from ipl_cricketHour");
             while (res.next()){
                 team1DayCount = Integer.parseInt(res.getString(1));
             }
-            res = query.executeQuery("select sum(team2_count) from ipl_crickethour");
+            res = query.executeQuery("select sum(team2_count) from ipl_cricketHour");
             while (res.next()){
                 team2DayCount = Integer.parseInt(res.getString(1));
             }
-            res = query.executeQuery("select sum(Match_Total_Tweets) from ipl_crickethour");
+            res = query.executeQuery("select sum(Match_Total_Tweets) from ipl_cricketHour");
             while (res.next()){
                 totalMatchDayTweets = Integer.parseInt(res.getString(1));
             }
-            query.execute("drop table if Exists ipl_cricketHour");
             PreparedStatement preparedStatement = (PreparedStatement) HiveConnection.getConnection().prepareStatement("" +
-                    "insert into table IPL_Cricket values(?,?,?,?,?,?,?)");
+                    "insert into table ipl_cricket values(?,?,?,?,?,?,?)");
             preparedStatement.setLong(1, code);
             preparedStatement.setString(2, team1hash);
             preparedStatement.setString(3, team2hash);
@@ -163,9 +163,9 @@ public class Storage {
             preparedStatement.setLong(7, totalMatchDayTweets);
             System.out.println("\nInserting End Day Resulted Records into Database..");
             int j = preparedStatement.executeUpdate() + 1;
-            System.out.println(j+"Record Inserted into Database Successfully...");
+            System.out.println("Closing After Analysis Storage...\n");
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("HiveSQLException : "+e);
         }
     }
 }

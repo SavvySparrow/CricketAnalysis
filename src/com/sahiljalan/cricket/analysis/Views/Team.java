@@ -29,24 +29,38 @@ public class Team {
 
     }
 
-    private void createTeamView() throws SQLException {
+    private void createTeamView() {
 
-        System.out.println("Running : creating " + Constants.TeamViewTemp + " View");
-        query.execute("create view if NOT EXISTS " + Constants.TeamViewTemp + " as " +
-                "select m.* from " + Constants.TeamMentions +
-                " m left join " + Constants.TeamHashtags + " h on (m.text = h.text) where h.text is NULL " +
-                "union all " +
-                "select h.* from " + Constants.TeamHashtags +
-                " h left join " + Constants.TeamMentions + " m on (h.text = m.text) where m.text is Null " +
-                "union all " +
-                "select h.* from " + Constants.TeamHashtags +
-                " h inner join " + Constants.TeamMentions + " m on (h.text = m.text) " +
-                "where ((h.created_at = m.created_at) AND (h.screen_name = m.screen_name))");
+        try{
+            System.out.println("Running : creating " + Constants.TeamViewTemp + " View");
+            query.execute("create view if NOT EXISTS " + Constants.TeamViewTemp + " as " +
+                    "select m.* from " + Constants.TeamMentions +
+                    " m left join " + Constants.TeamHashtags + " h on (m.text = h.text) where h.text is NULL " +
+                    "union all " +
+                    "select h.* from " + Constants.TeamHashtags +
+                    " h left join " + Constants.TeamMentions + " m on (h.text = m.text) where m.text is Null " +
+                    "union all " +
+                    "select h.* from " + Constants.TeamHashtags +
+                    " h inner join " + Constants.TeamMentions + " m on (h.text = m.text) " +
+                    "where ((h.created_at = m.created_at) AND (h.screen_name = m.screen_name))");
 
-        System.out.println("Running : creating " + Constants.TeamView + " View");
-        query.execute("create view if not EXISTS "+Constants.TeamView +" as " +
-                "select cast(NumberRows(a.screen_name) as bigint) rowid,a.created_at,a.screen_name,a.verified,a.text,b.country from "+Constants.TeamViewTemp +
-                " a left join "+Constants.TimeZoneTable+" b on (a.time_zone=b.zone)");
+            query.execute("drop view teamview_tempview1");
+            query.execute("create view if not EXISTS teamview_tempview1 as " +
+                    "select cast(NumberRows(screen_name) as bigint) rowid,created_at,screen_name,verified,text from "+Constants.TeamViewTemp);
+            System.out.println("Running : creating " + Constants.TeamView + " View");
+            query.execute("create view if not EXISTS "+Constants.TeamView +" as " +
+                    "select cast(NumberRows(a.screen_name) as bigint) rowid,a.created_at,a.screen_name,a.verified,a.text,b.country from "+Constants.TeamViewTemp +
+                    " a left join "+Constants.TimeZoneTable+" b on (a.time_zone=b.zone)");
+        }catch (SQLException e){
+            System.out.print("\nSQLException : "+e+"\n");
+            try {
+                new CricketAnalysis().startCleaningService();
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            System.exit(1);
+        }
+
 
     }
 }

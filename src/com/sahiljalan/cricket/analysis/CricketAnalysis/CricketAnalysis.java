@@ -10,6 +10,7 @@ import com.sahiljalan.cricket.analysis.Storage.Storage;
 import com.sahiljalan.cricket.analysis.Tables.RawTable;
 import com.sahiljalan.cricket.analysis.Tables.TimeZone;
 import com.sahiljalan.cricket.analysis.TeamData.TeamHASHMENData;
+import com.sahiljalan.cricket.analysis.Views.AnalysisViews.SabseBadaFan;
 import com.sahiljalan.cricket.analysis.Views.RawViews;
 import com.sahiljalan.cricket.analysis.Views.AnalysisViews.SentimentsView;
 import com.sahiljalan.cricket.analysis.Views.Team;
@@ -122,6 +123,11 @@ public class CricketAnalysis implements CricketAnalysisInterface {
     @Override
     public void createSentimentsViews(String Team1View,String Team2View) throws SQLException {
         new SentimentsView(Team1View,Team2View);
+    }
+
+    @Override
+    public void calSabseBadaFan() {
+        new SabseBadaFan();
     }
 
     @Override

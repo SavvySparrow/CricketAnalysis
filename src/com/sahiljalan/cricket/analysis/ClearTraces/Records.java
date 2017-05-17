@@ -64,6 +64,8 @@ public class Records implements Tables , Views {
         query.execute("drop view if EXISTS " + Constants.Team2_Temp);
         query.execute("drop view if EXISTS " + Constants.TEAM1_VIEW);
         query.execute("drop view if EXISTS " + Constants.TEAM2_VIEW);
+        query.execute("drop table if EXISTS " + Constants.TEAM1_VIEWTABLE);
+        query.execute("drop table if EXISTS " + Constants.TEAM2_VIEWTABLE);
     }
 
     @Override
@@ -96,6 +98,8 @@ public class Records implements Tables , Views {
         System.out.println("Running : Cleaning Raw Table from Records IF EXISTS");
         query.execute("drop table if exists " + Constants.TableName);
         query.execute("drop table if exists rawtable_temp");
+        query.execute("drop table if exists " + Constants.SABSE_BADA_FAN_TEAM_1);
+        query.execute("drop table if exists " + Constants.SABSE_BADA_FAN_TEAM_2);
     }
 
     @Override

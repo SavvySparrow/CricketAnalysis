@@ -1,7 +1,6 @@
 package com.sahiljalan.cricket.analysis.ConnectionToHive;
 
 import com.sahiljalan.cricket.analysis.Constants.Constants;
-import org.jetbrains.annotations.Contract;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -15,8 +15,12 @@ public class Constants {
     public static final String Team2Mentions = "Team2_mentionsView";
     public static final String Team1_Temp = "Team1_Temp";
     public static final String TEAM1_VIEW = "Team1View";
+    public static final String TEAM1_VIEWTABLE = "Team1viewtable";
+    public static final String SABSE_BADA_FAN_TEAM_1 = "sabse_bada_fan_team1";
     public static final String Team2_Temp = "Team2_Temp";
     public static final String TEAM2_VIEW = "Team2View";
+    public static final String TEAM2_VIEWTABLE = "Team2viewtable";
+    public static final String SABSE_BADA_FAN_TEAM_2 = "sabse_bada_fan_team2";
 
     public static String Teams = "KXIPvsMI";
     public static int year = 2017;
@@ -35,6 +39,12 @@ public class Constants {
     public static String TeamHashtags = "TeamHashtags_Sample";
     public static String TeamMentions = "TeamMentions_Sample";
     public static String TeamView = "Team_Sample";
+    public static String TeamViewTable = "TeamViewTable_Sample";
+    public static String SabseBadaFan = "sabsebadafan_Sample";
+    public static int SBF_MAX_COUNT1 = 0;
+    public static String SBF_MAX_COUNT_USERNAME1 = "";
+    public static int SBF_MAX_COUNT2 = 0;
+    public static String SBF_MAX_COUNT_USERNAME2 = "";
     public static String TeamViewTemp = "Team_Temp_Sample";
 
     public static String Team1Sentiments = "Team1_Sentiments";
@@ -83,6 +93,32 @@ public class Constants {
 
     public static void setTeamView(String TName){
         TeamView = TName;
+    }
+
+    public static void setTeamViewTable(String TName){
+        TeamViewTable = TName;
+    }
+
+    public static void setSBFMaxCount1(int SBFCount){
+
+        SBF_MAX_COUNT1 = SBFCount;
+    }
+
+    public static void setSBFMaxCountUserName1(String SBFCountUN){
+        SBF_MAX_COUNT_USERNAME1 = SBFCountUN;
+    }
+
+    public static void setSBFMaxCount2(int SBFCount){
+
+        SBF_MAX_COUNT2 = SBFCount;
+    }
+
+    public static void setSBFMaxCountUserName2(String SBFCountUN){
+        SBF_MAX_COUNT_USERNAME2 = SBFCountUN;
+    }
+
+    public static void setSabseBadaFanTable(String TName){
+        SabseBadaFan = TName;
     }
 
     public static void setTeamViewTemp(String TTame){

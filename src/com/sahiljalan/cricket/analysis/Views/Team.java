@@ -19,11 +19,13 @@ public class Team {
         Constants.setTeamHashtags(Constants.Team1Hashtags);
         Constants.setTeamMentions(Constants.Team1Mentions);
         Constants.setTeamView(Constants.TEAM1_VIEW);
+        Constants.setTeamViewTable(Constants.TEAM1_VIEWTABLE);
         Constants.setTeamViewTemp(Constants.Team1_Temp);
         createTeamView();
         Constants.setTeamHashtags(Constants.Team2Hashtags);
         Constants.setTeamMentions(Constants.Team2Mentions);
         Constants.setTeamView(Constants.TEAM2_VIEW);
+        Constants.setTeamViewTable(Constants.TEAM2_VIEWTABLE);
         Constants.setTeamViewTemp(Constants.Team2_Temp);
         createTeamView();
 
@@ -44,13 +46,13 @@ public class Team {
                     " h inner join " + Constants.TeamMentions + " m on (h.text = m.text) " +
                     "where ((h.created_at = m.created_at) AND (h.screen_name = m.screen_name))");
 
-            query.execute("drop view teamview_tempview1");
-            query.execute("create view if not EXISTS teamview_tempview1 as " +
-                    "select cast(NumberRows(screen_name) as bigint) rowid,created_at,screen_name,verified,text from "+Constants.TeamViewTemp);
             System.out.println("Running : creating " + Constants.TeamView + " View");
             query.execute("create view if not EXISTS "+Constants.TeamView +" as " +
                     "select cast(NumberRows(a.screen_name) as bigint) rowid,a.created_at,a.screen_name,a.verified,a.text,b.country from "+Constants.TeamViewTemp +
                     " a left join "+Constants.TimeZoneTable+" b on (a.time_zone=b.zone)");
+
+            query.execute("create table "+Constants.TeamViewTable+" as " +
+                    "select * from "+Constants.TeamView);
         }catch (SQLException e){
             System.out.print("\nSQLException : "+e+"\n");
             try {

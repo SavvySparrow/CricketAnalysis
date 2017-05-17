@@ -22,6 +22,7 @@ public interface CricketAnalysisInterface {
     void createTeamViews() throws SQLException;
 
     void createSentimentsViews(String t1,String t2) throws SQLException;
+    void calSabseBadaFan();
 
     void storeResults() throws SQLException;
 
@@ -39,5 +40,6 @@ public interface CricketAnalysisInterface {
     void startCleaningService() throws InterruptedException;
 
     void setCurrentTimeZone(String ist);
+
 }
 

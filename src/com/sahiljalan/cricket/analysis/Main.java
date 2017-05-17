@@ -17,7 +17,7 @@ public class Main extends CricketAnalysis{
         CricketAnalysis ca = new CricketAnalysis();
 
         //HDFS Location : Folder Partition Format (Team1vsTeam2/year/month/day/hour)
-        ca.setLocation("SRHvsMI",getYear(),getMonth(),getDay(),getHour());
+        ca.setLocation("SRHvsMI",getYear(),getMonth(),"08");
 
         //Create Connection to Hive
         startConnection();
@@ -36,7 +36,7 @@ public class Main extends CricketAnalysis{
         //After set hours application will stop processing and close the connection
         //Maximum Duration of Running 23 Hours , Must Be Specify
         //Example : If setStopHour(16) , means it will stop at 4 Pm IST
-        ca.setStopHour(12);
+        ca.setStopHour(14);
 
         //Keep Tables & Views after analysis (For Debugging Purpose)
         //Default value is False (Empty Parameter = Default Value)
@@ -48,6 +48,7 @@ public class Main extends CricketAnalysis{
 
         //Start Cleaning After Analysis
         //Dependencies : KeepTablesAndViews(Boolean) : set False to start this service
+        //TODO Control Cleaning Exception
         ca.startCleaningService();
 
         closeConnection();

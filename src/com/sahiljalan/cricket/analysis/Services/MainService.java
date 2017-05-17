@@ -43,6 +43,9 @@ public class MainService extends CricketAnalysis implements Runnable {
                     //Analyse the Sentiments of Fans of Both The Teams
                     ca.createSentimentsViews(Constants.TEAM1_VIEW,Constants.TEAM2_VIEW);
 
+                    //Sabse Bada Fan
+                    ca.calSabseBadaFan();
+
                     //Store Results in DataBase
                     ca.storeResults();
 

@@ -2,6 +2,8 @@ package com.sahiljalan.cricket.Views;
 
 import com.sahiljalan.cricket.Constants.Constants;
 import com.sahiljalan.cricket.CricketAnalysis.CricketAnalysis;
+import com.sahiljalan.cricket.Services.HiveConnectionService;
+import com.sahiljalan.cricket.Services.PreProcessingQueriesService;
 
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -11,7 +13,7 @@ import java.sql.Statement;
  */
 public class Team {
 
-    private Statement query = CricketAnalysis.getStatement();
+    private Statement query = PreProcessingQueriesService.getStatement();
 
     public Team() throws SQLException {
 

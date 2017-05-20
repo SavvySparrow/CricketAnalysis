@@ -3,6 +3,7 @@ package com.sahiljalan.cricket.Tables;
 import com.sahiljalan.cricket.Configuration.UserSpecific;
 import com.sahiljalan.cricket.Constants.Constants;
 import com.sahiljalan.cricket.CricketAnalysis.CricketAnalysis;
+import com.sahiljalan.cricket.Services.PreProcessingQueriesService;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,8 +15,9 @@ import java.sql.Timestamp;
  */
 public class CreateTB {
 
-    private static Statement query = CricketAnalysis.getStatement();
+    private static Statement query = PreProcessingQueriesService.getStatement();
     private static Timestamp UserDefinedTimeStamp, UTC_TimeStamp;
+    private static int totalMatchTweets;
 
     public static void mainTable() throws SQLException {
 
@@ -53,6 +55,13 @@ public class CreateTB {
         System.out.print("Executing : Starting "+Constants.USER_DEFINED_TIMEZONE +" Timestamp ----> ");
         UserDefinedTimeStamp = CricketAnalysis.getCurrentUserDefinedTimeStamp();
         System.out.println(UserDefinedTimeStamp);
+
+        res = query.executeQuery("select count(user.screen_name) from " + Constants.TableName);
+        while (res.next()) {
+            totalMatchTweets = Integer.parseInt(res.getString(1));
+        }
+        System.out.print("Total Match Tweets ----> ");
+        System.out.println(totalMatchTweets);
 
     }
 

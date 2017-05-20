@@ -2,6 +2,8 @@ package com.sahiljalan.cricket.Services.CleanTraces;
 
 import com.sahiljalan.cricket.Constants.Constants;
 import com.sahiljalan.cricket.CricketAnalysis.CricketAnalysis;
+import com.sahiljalan.cricket.Services.HiveConnectionService;
+import com.sahiljalan.cricket.Services.PreProcessingQueriesService;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,24 +16,12 @@ public class Records implements Tables , Views {
 
     public static Boolean isRunningFirstTime=true;
 
-    private static Statement query = CricketAnalysis.getStatement();
+    private static Statement query = PreProcessingQueriesService.getStatement();
 
     public Records() throws SQLException {
         Constants.setDBName("projectcricket");
         Constants.setTableName("matchbuzz");
         query.execute("use "+ Constants.DataBaseName);
-    }
-
-    public static Boolean isEmpty() throws SQLException {
-        query.execute("use projectcricket");
-        ResultSet res = query.executeQuery("show tables");
-        while(res.next()){}
-        if(res.getRow()==0){
-            isRunningFirstTime = true;
-            return true;
-        }
-        isRunningFirstTime = false;
-        return false;
     }
 
     public void clearAllRecords() throws SQLException{

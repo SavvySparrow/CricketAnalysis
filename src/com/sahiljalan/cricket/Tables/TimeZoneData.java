@@ -3,6 +3,8 @@ package com.sahiljalan.cricket.Tables;
 import com.sahiljalan.cricket.CricketAnalysis.CricketAnalysis;
 import com.sahiljalan.cricket.Constants.Constants;
 import com.sahiljalan.cricket.Services.CleanTraces.Records;
+import com.sahiljalan.cricket.Services.HiveConnectionService;
+import com.sahiljalan.cricket.Services.PreProcessingQueriesService;
 
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,9 +12,9 @@ import java.sql.Statement;
 /**
  * Created by sahiljalan on 28/4/17.
  */
-public class TimeZoneData extends Dictionary{
+public class TimeZoneData {
 
-    private Statement query = CricketAnalysis.getStatement();
+    private Statement query = PreProcessingQueriesService.getStatement();
 
     public TimeZoneData() throws SQLException {
         //First it calls the default constructor of Dictionary than create TimeZoneTable
@@ -30,11 +32,9 @@ public class TimeZoneData extends Dictionary{
                 ")" +
                 "ROW FORMAT DELIMITED FIELDS TERMINATED BY '\\t' ");
 
-        if(Records.isRunningFirstTime){
             System.out.println("Executing : Loading TimeZone Data");
             query.execute("LOAD DATA LOCAL INPATH '"+Constants.TimeZoneLocation+"' OVERWRITE INTO TABLE " +
                     Constants.TimeZoneTable);
-        }
 
     }
 }

@@ -4,6 +4,8 @@ import com.sahiljalan.cricket.Configuration.DefaultConf;
 import com.sahiljalan.cricket.Constants.Constants;
 import com.sahiljalan.cricket.Constants.TeamName;
 import com.sahiljalan.cricket.CricketAnalysis.CricketAnalysis;
+import com.sahiljalan.cricket.Services.HiveConnectionService;
+import com.sahiljalan.cricket.Services.PreProcessingQueriesService;
 import com.sahiljalan.cricket.TeamData.TeamHASHMEN;
 import com.sahiljalan.cricket.TeamData.TeamHASHMENData;
 
@@ -16,7 +18,7 @@ import java.util.Map;
  */
 public class RawViews {
 
-    private Statement query = CricketAnalysis.getStatement();
+    private Statement query = PreProcessingQueriesService.getStatement();
 
     public RawViews() throws SQLException{
 

@@ -12,7 +12,6 @@ public interface CricketAnalysisInterface {
     void setCricketType(String CK);
     void SetTeams(String t1, String t2);
     void setTwitterKeys(String s, String s1, String s2, String s3);
-    void generateFlumeConfigurationFile();
 
     void selectDB() throws SQLException;
     void selectDB(String DBName) throws SQLException;

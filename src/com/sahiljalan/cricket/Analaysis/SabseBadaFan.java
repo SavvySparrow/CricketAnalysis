@@ -2,6 +2,8 @@ package com.sahiljalan.cricket.Analaysis;
 
 import com.sahiljalan.cricket.Constants.Constants;
 import com.sahiljalan.cricket.CricketAnalysis.CricketAnalysis;
+import com.sahiljalan.cricket.Services.HiveConnectionService;
+import com.sahiljalan.cricket.Services.PreProcessingQueriesService;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,7 +14,7 @@ import java.sql.Statement;
  */
 public class SabseBadaFan {
 
-    private Statement query = CricketAnalysis.getStatement();
+    private Statement query = PreProcessingQueriesService.getStatement();
     private static int max = 0;
     private int Team = 1;
     private static String max_user_name = "";

@@ -1,28 +1,31 @@
 package com.sahiljalan.cricket.Tables;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 
-import com.sahiljalan.cricket.Services.CleanTraces.Records;
 import com.sahiljalan.cricket.Constants.Constants;
 import com.sahiljalan.cricket.CricketAnalysis.CricketAnalysis;
+import com.sahiljalan.cricket.Services.PreProcessingQueriesService;
 
-import static com.sahiljalan.cricket.Services.CleanTraces.Records.isRunningFirstTime;
+import static com.sahiljalan.cricket.Services.PreProcessingQueriesService.isRunningFirstTime;
 
 /**
  * Created by sahiljalan on 28/4/17.
  */
 public class RawTable {
 
-    private Statement query = CricketAnalysis.getStatement();
+    private Statement query = PreProcessingQueriesService.getStatement();
     private static Timestamp UTC_TimeStampCopy;
+    private static ResultSet res;
+    private int totalMatchRealTweets=0;
 
     public RawTable(String TableName) throws SQLException, InterruptedException {
 
         System.out.println("Running : " + getClass());
 
-        if(Records.isEmpty()){
+        if(isRunningFirstTime){
             System.out.println("Executing : Records EMPTY? -----> " + isRunningFirstTime);
             Constants.setTableName(TableName);
             System.out.println("Executing : Creating Raw Table ----> "+Constants.TableName);
@@ -50,7 +53,13 @@ public class RawTable {
 
 
         System.out.println("Executing : Filtering RealTime Data And Generate Working Table ----> "+Constants.TableName);
-        query.execute("CREATE table "+Constants.TableName+" as select * from rawtableview where ts > '"+ UTC_TimeStampCopy +"'");
+        query.execute("CREATE table "+Constants.TableName+" as select * from rawtableview where ts >= '"+ UTC_TimeStampCopy +"'");
 
+        res = query.executeQuery("select count(user.screen_name) from " + Constants.TableName);
+        while (res.next()) {
+            totalMatchRealTweets = Integer.parseInt(res.getString(1));
+        }
+        System.out.print("Total Match Tweets ----> ");
+        System.out.println(totalMatchRealTweets);
     }
 }

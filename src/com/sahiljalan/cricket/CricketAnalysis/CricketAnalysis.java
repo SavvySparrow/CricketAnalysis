@@ -3,14 +3,13 @@ package com.sahiljalan.cricket.CricketAnalysis;
 import com.sahiljalan.cricket.Analaysis.SabseBadaFan;
 import com.sahiljalan.cricket.Configuration.DefaultConf;
 import com.sahiljalan.cricket.Configuration.UserSpecific;
-import com.sahiljalan.cricket.Services.MainService;
+import com.sahiljalan.cricket.Services.*;
+import com.sahiljalan.cricket.Tables.Dictionary;
 import com.sahiljalan.cricket.Tables.TimeZoneData;
 import com.sahiljalan.cricket.Views.RawViews;
-import com.sahiljalan.cricket.ConnectionToHive.HiveConnection;
 import com.sahiljalan.cricket.Constants.Constants;
 import com.sahiljalan.cricket.Constants.TeamName;
 import com.sahiljalan.cricket.Databases.CreateDB;
-import com.sahiljalan.cricket.Services.CleanService;
 import com.sahiljalan.cricket.Storage.Storage;
 import com.sahiljalan.cricket.Tables.RawTable;
 import com.sahiljalan.cricket.TeamData.TeamHASHMENData;
@@ -24,7 +23,6 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
-import java.util.Scanner;
 import java.util.concurrent.CountDownLatch;
 
 import static com.sahiljalan.cricket.Services.CleanTraces.Records.isRunningFirstTime;
@@ -36,28 +34,30 @@ public class CricketAnalysis implements CricketAnalysisInterface {
 
     private static TimeZone flumeLocalTimeZone = java.util.TimeZone.getTimeZone(Constants.FLUME_LOCAL_TIMEZONE);
     private static TimeZone userDefinedTimeZone = java.util.TimeZone.getTimeZone(Constants.USER_DEFINED_TIMEZONE);
-    private static Statement query;
+    private static Statement query = PreProcessingQueriesService.getStatement();
     private static int count = 1;
     public static int totalRecords;
     private static CountDownLatch latch;
     private static Thread startAnalysis;
     private static Thread clearRecords;
-    private static boolean isAgentRunning=false;
-    private static boolean startCleaningOnly;
+    private static boolean isFlumeConfigurationSet;
+    public static boolean startCleaningOnly;
 
-    protected static void startConnection() throws SQLException, ClassNotFoundException {
-        HiveConnection.start();
-        query = HiveConnection.getConnection().createStatement();
-        query.execute("SET hive.support.sql11.reserved.keywords=false");
-        query.execute("CREATE TEMPORARY FUNCTION NumberRows AS " +
-                "'com.sahil.jalan.UDFNumberRows'");
+    public static void closeConnection() throws SQLException {
+        HiveConnectionService.close();
     }
 
-    protected static void closeConnection() throws SQLException {
-        HiveConnection.close();
-    }
-    public static Statement getStatement() {
-        return query;
+    public static void generateFlumeConfigurationFile() {
+        new UserSpecific();
+        System.out.println("Configuration is Set\n\n" +
+                "Agent Name ----> " +
+                ""+ DefaultConf.getBattleCode()+"\n" +
+                "Team 1 ----> " +
+                ""+ DefaultConf.getTeam1Hash()+"\n" +
+                "Team 2 ----> " +
+                ""+ DefaultConf.getTeam2Hash()+"\n\n");
+
+        isFlumeConfigurationSet = true;
     }
 
 
@@ -96,6 +96,10 @@ public class CricketAnalysis implements CricketAnalysisInterface {
         return Timestamp.valueOf(sdf.format(Calendar.getInstance(userDefinedTimeZone).getTime()));
     }
 
+    public static Boolean checkFlumeConfiguration(){
+        return isFlumeConfigurationSet;
+    }
+
     public static void startCleaningOnly(Boolean cleaningOnly){
         startCleaningOnly = cleaningOnly;
     }
@@ -119,25 +123,7 @@ public class CricketAnalysis implements CricketAnalysisInterface {
         UserSpecific.setAccessTokkenSecret(accessTokkenSecret);
     }
 
-    @Override
-    public void generateFlumeConfigurationFile() {
-        System.out.println("Generating Flume Configuration File\n");
-        new UserSpecific();
-        if(isRunningFirstTime){
-            Scanner input = new Scanner(System.in);
-            System.out.println("Configuration is Set\n" +
-                    "Agent Name ----> " +
-                    ""+ DefaultConf.getBattleCode()+"\n" +
-                    "Team 1 ----> " +
-                    ""+ DefaultConf.getTeam1Hash()+"\n" +
-                    "Team 1 ----> " +
-                    ""+ DefaultConf.getTeam2Hash()+"\n" +
-                    "Start Flume Agent Now\n\nAfter Starting Press Enter\n");
-            if(input.next()=="\n"){
-                isAgentRunning = true;
-            }
-        }
-    }
+
 
     @Override
     public void selectDB() throws SQLException {
@@ -158,9 +144,6 @@ public class CricketAnalysis implements CricketAnalysisInterface {
 
         //Generating Raw Table
         new RawTable(TableName);
-
-        //Loading TimeZone ,Dictionary And TeamData
-        new TimeZoneData();
 
         //Generate Raw Views
         //Four Raw Views : Two For Each TeamView
@@ -199,10 +182,6 @@ public class CricketAnalysis implements CricketAnalysisInterface {
 
     @Override
     public void setLocation(int battleCode,int year, String month, String day) {
-        if(!isAgentRunning){
-            System.out.println("Flume Agent is Not Running\t TRY AGAIN");
-            System.exit(1);
-        }
         Constants.setLocationWithOutHour(battleCode,year,month,day);
         System.out.println("Selected Working Location : "+Constants.HDFS_POSTFIX_LOCATION);
     }
@@ -224,7 +203,7 @@ public class CricketAnalysis implements CricketAnalysisInterface {
                 System.out.println("\n\n\nAnalysis Application is Started\n\n\n");
                 while(getHour()!=Constants.setStopHour){
 
-                    System.out.println("\n********** STARTED ****************** Performing Analysis : "+(count++)+" ***************************************************************************************************************************************************\n");
+                    printStartingPattern();
                     latch = new CountDownLatch(1);
                     startAnalysis = new Thread(new MainService(latch));
                     startAnalysis.start();
@@ -232,10 +211,13 @@ public class CricketAnalysis implements CricketAnalysisInterface {
                         latch.await();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                        ApplicationStartupUtil.shutdownStartupServices();
                         System.exit(1);
                     }
-                    System.out.println("\n********** ENDED ******************** Total Record Inserted Today : "+(++totalRecords)+" *************************************************************************************************************************************");
+                    printEndingPattern();
+
                 }
+
                 System.out.println("\n\n\nAnalysis Application is Stopped\n\n\n");
                 System.out.println("\nStarting After Analysis Storage.");
                 Storage.AfterAnalysisStorage();
@@ -248,6 +230,53 @@ public class CricketAnalysis implements CricketAnalysisInterface {
             }
         }
 
+    }
+
+    private void printEndingPattern() {
+
+        System.out.println();
+        for(int j=0;j<200;j++){
+            if(j%2==0)
+                System.out.print("* ");
+        }System.out.println();
+        for(int i=0;i<200;i+=2){
+            if(i==10)
+                System.out.print(" ENDED");
+            else if(i==20)
+                System.out.print("");
+            else if(i==42)
+                System.out.print(" Total Record Inserted Today : "+(++totalRecords));
+            else
+                System.out.print(" *");
+        }System.out.println();
+        for(int j=0;j<200;j++){
+            if(j%2==0)
+                System.out.print("* ");
+        }System.out.println();
+    }
+
+    private void printStartingPattern() {
+
+        for(int j=0;j<200;j++){
+            if(j%2==0)
+                System.out.print(" *");
+        }
+        System.out.println();
+        for(int i=0;i<200;i+=2){
+            if(i==10)
+                System.out.print("STARTED ");
+            else if(i==20)
+                System.out.print("");
+            else if(i==42)
+                System.out.print("Performing Analysis : "+(count++)+" ");
+            else
+                System.out.print("* ");
+        }System.out.println();
+        for(int j=0;j<200;j++){
+            if(j%2==0)
+                System.out.print(" *");
+        }
+        System.out.println("\n");
     }
 
     @Override

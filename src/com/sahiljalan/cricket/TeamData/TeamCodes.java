@@ -3,6 +3,8 @@ package com.sahiljalan.cricket.TeamData;
 import com.sahiljalan.cricket.Constants.Constants;
 import com.sahiljalan.cricket.CricketAnalysis.CricketAnalysis;
 import com.sahiljalan.cricket.Services.CleanTraces.Records;
+import com.sahiljalan.cricket.Services.HiveConnectionService;
+import com.sahiljalan.cricket.Services.PreProcessingQueriesService;
 
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -11,7 +13,7 @@ import java.sql.Statement;
  * Created by sahiljalan on 4/5/17.
  */
 public class TeamCodes {
-    private Statement query = CricketAnalysis.getStatement();
+    private Statement query = PreProcessingQueriesService.getStatement();
 
     public TeamCodes() throws SQLException {
         System.out.println("Running : "+ getClass());
@@ -29,11 +31,9 @@ public class TeamCodes {
                 "team2 string)" +
                 "ROW FORMAT DELIMITED FIELDS TERMINATED BY '\\t' ");
 
-        if(Records.isRunningFirstTime){
             System.out.println("Executing : Loading TeamCodes Data");
             query.execute("LOAD DATA LOCAL INPATH '"+Constants.TeamCodeLocation+"' OVERWRITE INTO TABLE " +
                     Constants.TeamCodeTable);
-        }
 
     }
 

@@ -2,24 +2,27 @@ package com.sahiljalan.cricket.Storage;
 
 import com.sahiljalan.cricket.Analaysis.SabseBadaFan;
 import com.sahiljalan.cricket.Configuration.DefaultConf;
+import com.sahiljalan.cricket.Services.ApplicationStartupUtil;
+import com.sahiljalan.cricket.Services.HiveConnectionService;
 import com.sahiljalan.cricket.Constants.Constants;
 import com.sahiljalan.cricket.CricketAnalysis.CricketAnalysis;
-import com.sahiljalan.cricket.Services.CleanTraces.Records;
+import com.sahiljalan.cricket.Services.PreProcessingQueriesService;
 import com.sahiljalan.cricket.Tables.CreateTB;
-import com.sahiljalan.cricket.ConnectionToHive.HiveConnection;
 
 import java.sql.*;
+
+import static com.sahiljalan.cricket.Services.PreProcessingQueriesService.isRunningFirstTime;
 
 /**
  * Created by sahiljalan on 3/5/17.
  */
 public class Storage {
 
-    Connection con = HiveConnection.getConnection();
-    private static Statement query = CricketAnalysis.getStatement();
+    Connection con = HiveConnectionService.getConnection();
+    private static Statement query = PreProcessingQueriesService.getStatement();
     private ResultSet res;
     private static int StatementNumber = 1;
-    private long t1c,t2c,totalMatchTweets;
+    private long t1c=0,t2c=0,totalMatchTweets=0;
     private static long team1DayCount,team2DayCount,totalMatchDayTweets;
     private Timestamp startingStandardTimeStamp,startingUtcTimeStamp;
     private static Timestamp dayLastTimeStamp;
@@ -67,7 +70,7 @@ public class Storage {
 
             //Statement 3
             System.out.println(StatementNumber+": Fetching Total Tweets At This Moment");
-            res = query.executeQuery("select count(id) from " + Constants.TableName);
+            res = query.executeQuery("select count(user.screen_name) from " + Constants.TableName);
             while (res.next()) {
                 totalMatchTweets = Integer.parseInt(res.getString(1));
 
@@ -171,8 +174,9 @@ public class Storage {
 
             //Statement 9
             System.out.println(StatementNumber+": Creating Storage Table IF NOT EXISTS For RealTime Data");
-            if(Records.isRunningFirstTime){
+            if(isRunningFirstTime){
                 CreateTB.storageTemporaryTable();
+                isRunningFirstTime = false;
             }
             StatementNumber++;
 
@@ -279,6 +283,7 @@ public class Storage {
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
             }
+            ApplicationStartupUtil.shutdownStartupServices();
             System.exit(1);
         }
 
@@ -315,7 +320,7 @@ public class Storage {
             while (res.next()){
                 totalMatchDayTweets = Integer.parseInt(res.getString(1));
             }
-            PreparedStatement preparedStatement = (PreparedStatement) HiveConnection.getConnection().prepareStatement("" +
+            PreparedStatement preparedStatement = (PreparedStatement) HiveConnectionService.getConnection().prepareStatement("" +
                     "insert into table ipl_cricket values(?,?,?,?,?,?,?)");
             preparedStatement.setLong(1, code);
             preparedStatement.setString(2, team1hash);

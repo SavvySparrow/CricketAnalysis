@@ -2,7 +2,8 @@ package com.sahiljalan.cricket.Configuration;
 
 import com.sahiljalan.cricket.Constants.Constants;
 import com.sahiljalan.cricket.Constants.TeamName;
-import com.sahiljalan.cricket.CricketAnalysis.CricketAnalysis;
+import com.sahiljalan.cricket.Services.HiveConnectionService;
+import com.sahiljalan.cricket.Services.PreProcessingQueriesService;
 import com.sahiljalan.cricket.TeamData.TeamHASHMEN;
 import com.sahiljalan.cricket.TeamData.TeamHASHMENData;
 
@@ -22,7 +23,7 @@ public class DefaultConf {
     private static final String atTheRate = "@";
     private static final String vs = "vs";
     private static final String comma = ",";
-    private static Statement query = CricketAnalysis.getStatement();
+    private static Statement query = PreProcessingQueriesService.getStatement();
     private static int teamHash=1,teamMen=1;
     private static FlumeSortedProperties flumeDefault = UserSpecific.getFlumeConf();
     private static Map<String,TeamHASHMEN> map = TeamHASHMENData.getMAP();

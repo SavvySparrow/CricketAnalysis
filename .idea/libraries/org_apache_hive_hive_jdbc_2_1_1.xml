@@ -6,7 +6,6 @@
       <root url="jar://$MAVEN_REPOSITORY$/org/apache/hive/hive-common/2.1.1/hive-common-2.1.1.jar!/" />
       <root url="jar://$MAVEN_REPOSITORY$/org/apache/hive/hive-shims/2.1.1/hive-shims-2.1.1.jar!/" />
       <root url="jar://$MAVEN_REPOSITORY$/org/apache/hive/shims/hive-shims-common/2.1.1/hive-shims-common-2.1.1.jar!/" />
-      <root url="jar://$MAVEN_REPOSITORY$/org/apache/logging/log4j/log4j-slf4j-impl/2.4.1/log4j-slf4j-impl-2.4.1.jar!/" />
       <root url="jar://$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.10/slf4j-api-1.7.10.jar!/" />
       <root url="jar://$MAVEN_REPOSITORY$/org/apache/logging/log4j/log4j-api/2.4.1/log4j-api-2.4.1.jar!/" />
       <root url="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/14.0.1/guava-14.0.1.jar!/" />

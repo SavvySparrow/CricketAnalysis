@@ -11,6 +11,7 @@ import com.sahiljalan.cricket.Tables.CreateTB;
 
 import java.sql.*;
 
+import static com.sahiljalan.cricket.CricketAnalysis.CricketAnalysis.getCurrentTimeStamp;
 import static com.sahiljalan.cricket.Services.PreProcessingQueriesService.isRunningFirstTime;
 
 /**
@@ -38,6 +39,8 @@ public class Storage {
 
 
     public Storage() throws SQLException {
+        System.out.println("\n"+getCurrentTimeStamp()+"Running : "+ getClass());
+
         System.out.println("\nStorage Processing Started.");
         storageTable();
         System.out.println("\nStorage Processing Completed...");

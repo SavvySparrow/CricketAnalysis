@@ -13,6 +13,8 @@ import java.sql.Statement;
 import java.sql.SQLException;
 import java.util.Map;
 
+import static com.sahiljalan.cricket.CricketAnalysis.CricketAnalysis.getCurrentTimeStamp;
+
 /**
  * Created by sahiljalan on 28/4/17.
  */
@@ -22,7 +24,7 @@ public class RawViews {
 
     public RawViews() throws SQLException{
 
-        System.out.println("Running : "+ getClass());
+        System.out.println(getCurrentTimeStamp()+"Running : "+ getClass());
 
         System.out.println("Executing : Filtering Team 1 Data");
         setRawViews("Team1");

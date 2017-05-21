@@ -9,6 +9,8 @@ import com.sahiljalan.cricket.Services.PreProcessingQueriesService;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static com.sahiljalan.cricket.CricketAnalysis.CricketAnalysis.getCurrentTimeStamp;
+
 /**
  * Created by sahiljalan on 28/4/17.
  */
@@ -18,7 +20,7 @@ public class TimeZoneData {
 
     public TimeZoneData() throws SQLException {
         //First it calls the default constructor of Dictionary than create TimeZoneTable
-        System.out.println("Running : "+ getClass());
+        System.out.println(getCurrentTimeStamp()+"Running : "+ getClass());
         createTimeZoneTable();
         System.out.println();
     }

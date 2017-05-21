@@ -9,6 +9,7 @@ import com.sahiljalan.cricket.Constants.Constants;
 import com.sahiljalan.cricket.CricketAnalysis.CricketAnalysis;
 import com.sahiljalan.cricket.Services.PreProcessingQueriesService;
 
+import static com.sahiljalan.cricket.CricketAnalysis.CricketAnalysis.getCurrentTimeStamp;
 import static com.sahiljalan.cricket.Services.PreProcessingQueriesService.isRunningFirstTime;
 
 /**
@@ -23,7 +24,7 @@ public class RawTable {
 
     public RawTable(String TableName) throws SQLException, InterruptedException {
 
-        System.out.println("Running : " + getClass());
+        System.out.println(getCurrentTimeStamp()+"Running :  ("+this.getClass().getName());
 
         if(isRunningFirstTime){
             System.out.println("Executing : Records EMPTY? -----> " + isRunningFirstTime);

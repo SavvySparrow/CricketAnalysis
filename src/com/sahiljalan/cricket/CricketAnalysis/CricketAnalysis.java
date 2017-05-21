@@ -4,8 +4,6 @@ import com.sahiljalan.cricket.Analaysis.SabseBadaFan;
 import com.sahiljalan.cricket.Configuration.DefaultConf;
 import com.sahiljalan.cricket.Configuration.UserSpecific;
 import com.sahiljalan.cricket.Services.*;
-import com.sahiljalan.cricket.Tables.Dictionary;
-import com.sahiljalan.cricket.Tables.TimeZoneData;
 import com.sahiljalan.cricket.Views.RawViews;
 import com.sahiljalan.cricket.Constants.Constants;
 import com.sahiljalan.cricket.Constants.TeamName;
@@ -15,6 +13,7 @@ import com.sahiljalan.cricket.Tables.RawTable;
 import com.sahiljalan.cricket.TeamData.TeamHASHMENData;
 import com.sahiljalan.cricket.Analaysis.SentimentsView;
 import com.sahiljalan.cricket.Views.Team;
+import org.apache.log4j.Logger;
 
 import java.sql.Statement;
 
@@ -24,8 +23,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.concurrent.CountDownLatch;
-
-import static com.sahiljalan.cricket.Services.CleanTraces.Records.isRunningFirstTime;
 
 /**
  * Created by sahiljalan on 29/4/17.
@@ -94,6 +91,10 @@ public class CricketAnalysis implements CricketAnalysisInterface {
     public static Timestamp getCurrentUserDefinedTimeStamp(){
         SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
         return Timestamp.valueOf(sdf.format(Calendar.getInstance(userDefinedTimeZone).getTime()));
+    }
+    public static Timestamp getCurrentTimeStamp(){
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+        return Timestamp.valueOf(sdf.format(Calendar.getInstance().getTime()));
     }
 
     public static Boolean checkFlumeConfiguration(){
@@ -281,16 +282,16 @@ public class CricketAnalysis implements CricketAnalysisInterface {
 
     @Override
     public void startCleaningService(String cleanType) throws InterruptedException {
-
         if(!Constants.KeepTableAndViews){
-            System.out.println("\n <---- Cleaning Service Started ---->\n");
+            System.out.println("\n"+getCurrentTimeStamp()+" ("+this.getClass().getSimpleName()+") (LINE:"+Thread.currentThread().getStackTrace()[1].getLineNumber()+") : " +
+                    "<---- Cleaning Service Started ---->\n");
             latch = new CountDownLatch(1);
             clearRecords = new Thread(new CleanService(latch,cleanType));
             clearRecords.start();
             latch.await();
-            System.out.println("\n <---- Cleaning Service Completed ---->");
+            System.out.println("\n"+getCurrentTimeStamp()+" (Class: "+this.getClass().getSimpleName()+") (LINE:"+Thread.currentThread().getStackTrace()[1].getLineNumber()+") : " +
+                    "<---- Cleaning Service Completed ---->");
         }
-
     }
 
     @Override

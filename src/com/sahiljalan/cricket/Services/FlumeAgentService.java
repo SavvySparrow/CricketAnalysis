@@ -40,14 +40,7 @@ public class FlumeAgentService extends BaseHealthChecker {
                     System.out.println("\nPlease wait for few minute for fetching " +
                             "some data from the twitter server for the first run");
                     for (int i = 1; i <= 80; i++) {
-                        if(i%7==0){
-                            i=(i*100)/80;
-                            System.out.print(i + "% ");
-                        }
-                        if(i%10==0){
-                            i=(i*100)/80;
-                            System.out.print(i + "% ");
-                        }
+                        System.out.print(".");
                         Thread.sleep(1000);
                     }
                 } else {

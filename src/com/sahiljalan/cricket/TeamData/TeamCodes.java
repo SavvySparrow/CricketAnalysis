@@ -9,6 +9,8 @@ import com.sahiljalan.cricket.Services.PreProcessingQueriesService;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static com.sahiljalan.cricket.CricketAnalysis.CricketAnalysis.getCurrentTimeStamp;
+
 /**
  * Created by sahiljalan on 4/5/17.
  */
@@ -16,7 +18,7 @@ public class TeamCodes {
     private Statement query = PreProcessingQueriesService.getStatement();
 
     public TeamCodes() throws SQLException {
-        System.out.println("Running : "+ getClass());
+        System.out.println(getCurrentTimeStamp()+"Running : "+ getClass());
         createTeamCodesTable();
         System.out.println();
     }

@@ -8,6 +8,8 @@ import com.sahiljalan.cricket.Services.PreProcessingQueriesService;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static com.sahiljalan.cricket.CricketAnalysis.CricketAnalysis.getCurrentTimeStamp;
+
 /**
  * Created by sahiljalan on 29/4/17.
  */
@@ -17,7 +19,7 @@ public class SentimentsView {
 
     public SentimentsView(String TeamView1,String TeamView2) throws SQLException {
 
-        System.out.println("Running : "+ getClass());
+        System.out.println(getCurrentTimeStamp()+"Running : "+ getClass());
 
         System.out.println("Team 1 Analysis Started..");
         Constants.setsentimentView1(Constants.SentiViewT1V1);

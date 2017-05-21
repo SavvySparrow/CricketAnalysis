@@ -4,16 +4,31 @@ import com.sahiljalan.cricket.Constants.TeamName;
 import com.sahiljalan.cricket.CricketAnalysis.CricketAnalysis;
 
 import com.sahiljalan.cricket.Services.ApplicationStartupUtil;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 
 /**
  * Created by sahiljalan on 28/4/17.
  */
+
 public class Main extends CricketAnalysis {
 
     private static boolean result = false;
 
     //Todo Future Updates Realtime Sentiment Analysis to Specific Player in the world cricket
-    public static void main(String arg[]) throws InterruptedException {
+    public static void main(String arg[]) throws InterruptedException, FileNotFoundException {
+
+        System.setProperty("ApplicationLogs.log", "logs/APPLICATION LOGS/Application "+getCurrentTimeStamp()+".log");
+        PrintStream out = new PrintStream(new FileOutputStream("logs/OUTPUT LOGS/Output "+getCurrentTimeStamp()+".log"));
+        System.setOut(out);
+        String log4jConfPath = "conf/log4j.properties";
+        PropertyConfigurator.configure(log4jConfPath);
+        Logger.getRootLogger().setLevel(Level.INFO);
 
         /** Create Object Of This Class To Access Non-Static Methods Of SuperClass */
         CricketAnalysis ca = new CricketAnalysis();

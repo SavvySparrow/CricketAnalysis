@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static com.sahiljalan.cricket.CricketAnalysis.CricketAnalysis.getCurrentTimeStamp;
+
 /**
  * Created by sahiljalan on 7/5/17.
  */
@@ -22,7 +24,7 @@ public class SabseBadaFan {
 
     public SabseBadaFan(){
 
-        System.out.println("Running : "+ getClass());
+        System.out.println(getCurrentTimeStamp()+"Running : "+ getClass());
 
         System.out.println("Team 1 Fan Analaysing Started..");
         Constants.setSabseBadaFanTable(Constants.SABSE_BADA_FAN_TEAM_1);

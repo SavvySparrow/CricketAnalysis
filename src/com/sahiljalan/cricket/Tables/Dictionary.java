@@ -10,6 +10,8 @@ import com.sahiljalan.cricket.TeamData.TeamCodes;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static com.sahiljalan.cricket.CricketAnalysis.CricketAnalysis.getCurrentTimeStamp;
+
 /**
  * Created by sahiljalan on 28/4/17.
  */
@@ -19,7 +21,7 @@ public class Dictionary{
 
     public Dictionary() throws SQLException {
         //First it calls the default constructor of TeamCodes than create Dictionary
-        System.out.println("Running : "+ getClass());
+        System.out.println(getCurrentTimeStamp()+"Running : "+ getClass());
         createDictionaryTable();
         System.out.println();
     }

@@ -3,6 +3,7 @@ package com.sahiljalan.cricket.Services;
 import com.sahiljalan.cricket.Constants.Constants;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 import java.sql.*;
 import java.util.concurrent.CountDownLatch;
@@ -26,8 +27,7 @@ public class HiveConnectionService extends BaseHealthChecker{
     public void verifyService() throws Exception{
 
         System.out.println("Checking " + this.getServiceName());
-        Logger.getRootLogger().setLevel(Level.ERROR);
-        Logger.getRootLogger().setLevel(Level.ERROR);
+
         try {
             Class.forName(DriverName);
             con = DriverManager.getConnection("jdbc:hive2://localhost:10000/default",
